@@ -1,20 +1,30 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import "react-native-gesture-handler";
+import { StatusBar } from "expo-status-bar";
+import React from "react";
+import { NativeBaseProvider } from "native-base";
+import { QueryClient, QueryClientProvider } from "react-query";
+import useCachedResources from "./src/hooks/useCachedResources";
+import Navigation from "./src/navigation";
+import theme from "./src/theme";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+
+// Create a client
+const queryClient = new QueryClient();
 
 export default function App() {
+  const isLoadingComplete = useCachedResources();
+
+  if (!isLoadingComplete) {
+    return null;
+  }
   return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <QueryClientProvider client={queryClient}>
+        <NativeBaseProvider theme={theme}>
+          <Navigation />
+          <StatusBar />
+        </NativeBaseProvider>
+      </QueryClientProvider>
+    </GestureHandlerRootView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
