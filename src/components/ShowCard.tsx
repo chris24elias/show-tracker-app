@@ -31,7 +31,15 @@ const ShowCard: React.FC<ShowCardProps> = ({
   };
 
   return (
-    <View style={[{ flex: 1, marginTop: 10 }, style]}>
+    <View
+      style={[
+        {
+          flex: 1,
+          marginTop: 10,
+        },
+        style,
+      ]}
+    >
       <TouchableOpacity
         onPress={() => onPress()}
         style={{
@@ -51,8 +59,19 @@ const ShowCard: React.FC<ShowCardProps> = ({
           />
         ) : null}
       </TouchableOpacity>
-      <View style={{ alignSelf: "center", width: size }}>
-        <Text fontSize="md" fontWeight="bold" color="white" marginTop={3}>
+      <View
+        style={{
+          alignSelf: "center",
+          width: size,
+        }}
+      >
+        <Text
+          fontSize="md"
+          fontWeight="bold"
+          color="white"
+          marginTop={3}
+          numberOfLines={2}
+        >
           {title}
         </Text>
         <Text fontSize="sm" color="primary.500" marginTop={1}>

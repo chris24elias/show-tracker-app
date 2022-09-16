@@ -1,25 +1,34 @@
-import React from 'react';
-import { StyleSheet } from 'react-native';
-import { MaterialIcons, Feather } from '@expo/vector-icons';
-import { Box, Icon, IconButton } from 'native-base';
-import { useNavigation } from '@react-navigation/native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import React from "react";
+import { StyleSheet } from "react-native";
+import { MaterialIcons, Feather } from "@expo/vector-icons";
+import { Box, Icon, IconButton } from "native-base";
+import { useNavigation } from "@react-navigation/native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const FloatingBackButton: React.FC = () => {
   const navigation = useNavigation();
   const insets = useSafeAreaInsets();
+  const size = 40;
   return (
     <Box
       style={{
-        position: 'absolute',
+        position: "absolute",
         top: insets.top,
-        left: 0,
-        zIndex: 10
+        left: "2%",
+        backgroundColor: "rgba(0,0,0,0.5)",
+        zIndex: 10,
+        justifyContent: "center",
+        alignItems: "center",
+        width: size,
+        height: size,
+        borderRadius: size / 2,
       }}
     >
       <IconButton
         onPress={() => navigation.goBack()}
-        icon={<Icon size="md" as={<Feather name="chevron-left" />} color="white" />}
+        icon={
+          <Icon size="lg" as={<Feather name="chevron-left" />} color="white" />
+        }
       />
     </Box>
   );

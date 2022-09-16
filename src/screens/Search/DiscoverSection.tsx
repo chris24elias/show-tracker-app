@@ -1,9 +1,9 @@
-import { useNavigation } from '@react-navigation/native';
-import { Box, FlatList, Heading } from 'native-base';
-import React from 'react';
-import { StyleSheet } from 'react-native';
-import ShowCard from '../../components/ShowCard';
-import routes from '../../navigation/routes';
+import { useNavigation } from "@react-navigation/native";
+import { Box, FlatList, Heading } from "native-base";
+import React from "react";
+import { StyleSheet } from "react-native";
+import ShowCard from "../../components/ShowCard";
+import routes from "../../navigation/routes";
 
 interface DiscoverSectionProps {
   data: any[];
@@ -12,7 +12,7 @@ interface DiscoverSectionProps {
 
 const DiscoverSection: React.FC<DiscoverSectionProps> = ({ data, title }) => {
   const navigation = useNavigation();
-  const sectionCardheight = 100;
+  const sectionCardheight = 90;
 
   const renderItem = ({ item }) => {
     return (
@@ -23,7 +23,7 @@ const DiscoverSection: React.FC<DiscoverSectionProps> = ({ data, title }) => {
         year={item.first_air_date}
         onPress={() =>
           navigation.navigate(routes.showDetails, {
-            tmdbId: item.id
+            tmdbId: item.id,
           })
         }
         style={{ marginRight: 15 }}

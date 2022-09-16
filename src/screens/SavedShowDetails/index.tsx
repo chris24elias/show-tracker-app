@@ -114,7 +114,11 @@ const SavedShowDetails: React.FC<SavedShowDetailsProps> = ({
   });
 
   if (loading && !data) {
-    return <PageLoader />;
+    return (
+      <Page>
+        <FloatingBackButton />
+      </Page>
+    );
   }
 
   // eslint-disable-next-line

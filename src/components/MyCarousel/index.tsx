@@ -1,10 +1,11 @@
 import { Box } from "native-base";
 import React, { useState } from "react";
 import { Image, StyleSheet, useWindowDimensions } from "react-native";
-// import Carousel, { Pagination } from 'react-native-snap-carousel';
 import Carousel from "react-native-reanimated-carousel";
 import { LinearGradient } from "expo-linear-gradient";
 import { Colors } from "../../theme";
+import { Pagination } from "./Pagination";
+import { useSharedValue } from "react-native-reanimated";
 
 interface MyCarouselProps {
   data: any[];
@@ -17,6 +18,9 @@ const MyCarousel: React.FC<MyCarouselProps> = ({
   containerSize,
   containerWidth,
 }) => {
+  const progressValue = useSharedValue<number>(0);
+  const [activeSlide, setActiveSlide] = useState(0);
+
   const renderItem = ({ item: { path, height, aspect_ratio }, index }) => {
     return (
       <Box
@@ -41,9 +45,8 @@ const MyCarousel: React.FC<MyCarouselProps> = ({
     );
   };
 
-  const [activeSlide, setActiveSlide] = useState(0);
-
   const bgColor = (opactiy = "1") => `${Colors.mainBg[500]}${opactiy}`;
+
   return (
     <Box style={{ height: containerSize }}>
       {/* <Carousel
@@ -65,14 +68,17 @@ const MyCarousel: React.FC<MyCarouselProps> = ({
       /> */}
 
       <Carousel
-        loop
         width={containerWidth}
         // height={350}
         // autoPlay={true}
+        loop={false}
         data={data}
         // scrollAnimationDuration={1000}
         onSnapToItem={(index) => console.log("current index:", index)}
         renderItem={renderItem}
+        onProgressChange={(_, absoluteProgress) =>
+          (progressValue.value = absoluteProgress)
+        }
       />
 
       <LinearGradient
@@ -90,30 +96,7 @@ const MyCarousel: React.FC<MyCarouselProps> = ({
           paddingBottom: "15%",
         }}
       >
-        {/* <Pagination
-          dotsLength={data.length}
-          activeDotIndex={activeSlide}
-          containerStyle={{
-            position: "absolute",
-            //   backgroundColor: 'rgba(0, 0, 0, 0.75)',
-            alignSelf: "center",
-            bottom: 0,
-          }}
-          dotStyle={{
-            width: 10,
-            height: 10,
-            borderRadius: 5,
-            marginHorizontal: 8,
-            backgroundColor: "rgba(255, 255, 255, 0.92)",
-          }}
-          inactiveDotStyle={
-            {
-              // Define styles for inactive dots here
-            }
-          }
-          inactiveDotOpacity={0.4}
-          inactiveDotScale={0.6}
-        /> */}
+        <Pagination dotsLength={data.length} progressValue={progressValue} />
       </LinearGradient>
     </Box>
   );
