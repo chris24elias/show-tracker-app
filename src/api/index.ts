@@ -73,48 +73,34 @@ type ImageObject = {
   aspect_ratio: number;
 };
 
-const getImagesForShow = (
+const getImagesForShow = async (
   tmdbId: number,
   size = 500
 ): Promise<{ posters: ImageObject[]; backdrops: ImageObject[] }> => {
-  return new Promise((resolve, reject) => {
-    try {
-      tmdbAPi
-        .get(`/tv/${tmdbId}/images?api_key=${TMDB_API_KEY}`)
-        .then((response) => {
-          const images = response.data;
+  try {
+    const response = await tmdbAPi.get(
+      `/tv/${tmdbId}/images?api_key=${TMDB_API_KEY}`
+    );
+    const images = response.data;
 
-          // const posterFilePath =
-          //   images.posters && images.posters.length > 0 ? images.posters[0].file_path : undefined;
-          // // const file_size = get().config.poster_sizes
-          // const posterPath = posterFilePath
-          //   ? `https://image.tmdb.org/t/p/w500${posterFilePath}`
-          //   : undefined;
+    const createImageObj = ({ file_path, aspect_ratio, height }) => ({
+      path: `https://image.tmdb.org/t/p/w${size}${file_path}`,
+      aspect_ratio,
+      height,
+    });
+    const max = 6;
+    const posters = images.posters.slice(0, max).map(createImageObj);
+    const backdrops = images.backdrops.slice(0, max).map(createImageObj);
+    const logos = images.logos.slice(0, max).map(createImageObj);
 
-          const posters = images.posters.map(
-            ({ file_path, aspect_ratio, height }) => ({
-              path: `https://image.tmdb.org/t/p/w${size}${file_path}`,
-              aspect_ratio,
-              height,
-            })
-          );
-          const backdrops = images.backdrops.map(
-            ({ file_path, aspect_ratio, height }) => ({
-              path: `https://image.tmdb.org/t/p/w${size}${file_path}`,
-              aspect_ratio,
-              height,
-            })
-          );
-
-          resolve({
-            posters: posters.slice(4),
-            backdrops: backdrops.slice(4),
-          });
-        });
-    } catch (error) {
-      reject(error);
-    }
-  });
+    return {
+      posters: posters,
+      backdrops: backdrops,
+      logos,
+    };
+  } catch (error) {
+    throw error;
+  }
 };
 
 const getUrlForImagePath = (filePath: string, size = 500) => {

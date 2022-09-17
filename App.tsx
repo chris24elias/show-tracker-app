@@ -8,6 +8,10 @@ import Navigation from "./src/navigation";
 import theme from "./src/theme";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 
+if (__DEV__) {
+  import("./ReactotronConfig").then(() => console.log("Reactotron Configured"));
+}
+
 // Create a client
 const queryClient = new QueryClient();
 
