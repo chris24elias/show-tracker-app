@@ -168,6 +168,7 @@ const Search: React.FC<SearchProps> = ({ navigation }) => {
 
         <FlatList
           px={3}
+          mb={3}
           data={[
             { id: "1", title: "Popular", data: popular },
             {

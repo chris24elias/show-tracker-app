@@ -145,17 +145,6 @@ const Watching: React.FC<WatchingProps> = ({ navigation }) => {
         </Actionsheet.Content>
       </Actionsheet>
       <Box flex={1} bg="mainBg.500" safeAreaTop>
-        {/* <AppHeader
-          title="My Shows"
-          renderRight={() => {
-            return (
-              <IconButton
-                onPress={onOpen}
-                icon={<Icon as={<AntDesign name="filter" />} size="sm" color="white" />}
-              />
-            );
-          }}
-        /> */}
         <Box
           flexDirection="row"
           marginY={4}
@@ -166,7 +155,7 @@ const Watching: React.FC<WatchingProps> = ({ navigation }) => {
           <IconButton
             onPress={onOpen}
             icon={
-              <Icon as={<AntDesign name="filter" />} size="sm" color="white" />
+              <Icon as={<AntDesign name="filter" />} size="md" color="white" />
             }
           />
         </Box>

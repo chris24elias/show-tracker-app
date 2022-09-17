@@ -12,7 +12,7 @@ interface DiscoverSectionProps {
 
 const DiscoverSection: React.FC<DiscoverSectionProps> = ({ data, title }) => {
   const navigation = useNavigation();
-  const sectionCardheight = 90;
+  const sectionCardheight = 120;
 
   const renderItem = ({ item }) => {
     return (

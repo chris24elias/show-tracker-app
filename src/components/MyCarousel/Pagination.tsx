@@ -22,7 +22,12 @@ const Pagination: React.FC<IPaginationProps> = ({
   return (
     <View style={{ flexDirection: "row", position: "absolute", bottom: "5%" }}>
       {new Array(dotsLength).fill("").map((_, i) => {
-        return <PaginationDot {...{ dotsLength, progressValue, index: i }} />;
+        return (
+          <PaginationDot
+            key={String(i)}
+            {...{ dotsLength, progressValue, index: i }}
+          />
+        );
       })}
     </View>
   );

@@ -44,11 +44,21 @@ const getImageApiConfig = async () => {
 // };
 
 const getTmdbShowDetails = (tmdbId: number) => {
-  return tmdbAPi.get(`/tv/${tmdbId}?api_key=${TMDB_API_KEY}`);
+  return tmdbAPi.get(
+    `/tv/${tmdbId}?api_key=${TMDB_API_KEY}&append_to_response=videos`
+  );
 };
 
 const getShowRecommendations = (tmdbId: number) => {
   return tmdbAPi.get(`/tv/${tmdbId}/recommendations?api_key=${TMDB_API_KEY}`);
+};
+
+const getTVGenres = () => {
+  return tmdbAPi.get(`/genre/tv/list?api_key=${TMDB_API_KEY}`);
+};
+
+const getSeasonDetails = (tvId: string, seasonId: string) => {
+  return tmdbAPi.get(`/tv/${tvId}/season/${seasonId}?api_key=${TMDB_API_KEY}`);
 };
 
 const getImagesForShow = (
@@ -109,4 +119,6 @@ export default {
   getTmdbShowDetails,
   searchTmdbShows,
   getUrlForImagePath,
+  getTVGenres,
+  getSeasonDetails,
 };

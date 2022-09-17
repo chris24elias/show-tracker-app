@@ -1,7 +1,6 @@
-import { Button, Center } from "native-base";
+import { Box, Button, Center, Heading } from "native-base";
 import React from "react";
 import { StyleSheet } from "react-native";
-import AppHeader from "../../components/AppHeader";
 import useAuthStore from "../../stores/auth";
 import { Page } from "../../theme";
 
@@ -13,8 +12,15 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({ navigation }) => {
   const logout = useAuthStore((state) => state.logout);
 
   return (
-    <Page>
-      <AppHeader title="Settings" />
+    <Page safeAreaTop>
+      <Box
+        flexDirection="row"
+        marginY={4}
+        marginX={3}
+        justifyContent="space-between"
+      >
+        <Heading>Settings</Heading>
+      </Box>
       <Center flex={1}>
         <Button onPress={() => logout()}>LOGOUT</Button>
       </Center>

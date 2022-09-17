@@ -1,4 +1,13 @@
-import { Box, Text, Heading, Button, Icon, Container, Row } from "native-base";
+import {
+  Box,
+  Text,
+  Heading,
+  Button,
+  Icon,
+  Container,
+  Row,
+  Pressable,
+} from "native-base";
 import React from "react";
 
 import {
@@ -28,6 +37,8 @@ import ShowCard from "../../components/ShowCard";
 import routes from "../../navigation/routes";
 import { Page } from "../../theme";
 import { addShow, updateStatus } from "../../api/firebase/myShows";
+import RootNavigation from "../../navigation/RootNavigation";
+import VideoPlayer from "../../components/VideoPlayer";
 
 interface SavedShowDetailsProps {
   navigation: any;
@@ -52,6 +63,8 @@ const SavedShowDetails: React.FC<SavedShowDetailsProps> = ({
   const scrollY = useSharedValue<number>(0);
   const isScrolling = useSharedValue(false);
 
+  const videos = data?.videos?.results;
+  console.log("data", videos);
   const containerSize = height * 0.45;
 
   const onAddToList = () => {
@@ -64,6 +77,10 @@ const SavedShowDetails: React.FC<SavedShowDetailsProps> = ({
       name,
       first_air_date,
     });
+  };
+
+  const onSeasonPress = (id: string) => {
+    navigation.navigate("SeasonDetails", { tvId: tmdbId, seasonId: id });
   };
 
   const onStatusChange = (newStatus) => {
@@ -197,7 +214,20 @@ const SavedShowDetails: React.FC<SavedShowDetailsProps> = ({
         </Box>
         <Box px={5} marginTop={3}>
           <Description description={overview} />
-          <Seasons seasons={seasons} />
+          <Seasons seasons={seasons} onSeasonPress={onSeasonPress} />
+        </Box>
+        <Box px={5} marginTop={3}>
+          <Heading size="lg" marginBottom={2}>
+            Videos
+          </Heading>
+          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+            {videos &&
+              videos.map((video) => {
+                if (video.site === "YouTube") {
+                  return <VideoPlayer key={video.id} video={video} />;
+                }
+              })}
+          </ScrollView>
         </Box>
         <Box px={5} marginTop={6}>
           <Heading size="lg" marginBottom={2}>
@@ -255,7 +285,7 @@ const Description = ({ description }) => {
   return <Text>{description}</Text>;
 };
 
-const Seasons = ({ seasons }) => {
+const Seasons = ({ seasons, onSeasonPress }) => {
   return (
     <Box marginTop={6}>
       <Heading size="lg" marginBottom={2}>
@@ -264,7 +294,13 @@ const Seasons = ({ seasons }) => {
       <Box mt="3">
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
           {seasons.map((s) => {
-            return <Season key={s.id} {...s} />;
+            return (
+              <Season
+                key={s.id}
+                {...s}
+                onSeasonPress={() => onSeasonPress(s.season_number)}
+              />
+            );
           })}
         </ScrollView>
       </Box>
@@ -280,17 +316,21 @@ const Season = ({
   overview,
   poster_path,
   season_number,
+  onSeasonPress,
 }) => {
-  const poster = `https://image.tmdb.org/t/p/w${500}${poster_path}`;
+  const poster = poster_path
+    ? `https://image.tmdb.org/t/p/w${500}${poster_path}`
+    : "https://cdn.shopify.com/s/files/1/0533/2089/files/placeholder-images-image_large.png?format=jpg&quality=90&v=1530129081";
   console.log("POSTER PATH", poster);
 
   const size = 125;
-  const year = `(${air_date?.slice(0, 4) || ""})`;
+  const year = air_date ? `(${air_date?.slice(0, 4) || ""})` : "";
 
   return (
-    <Box
-      justifyContent="center"
-      alignItems="center"
+    <Pressable
+      onPress={onSeasonPress}
+      // justifyContent="center"
+      // alignItems="center"
       marginRight={5}
       style={{
         width: size,
@@ -321,17 +361,11 @@ const Season = ({
         >
           {name}
         </Text>
-        <Text
-          fontSize="xs"
-          fontWeight="light"
-          // color="muted.400"
-          color="primary.500"
-        >
-          {episode_count} Episodes - {year}
+        <Text fontSize="xs" fontWeight="light" color="primary.500">
+          {episode_count} Episodes{year ? ` - ${year}` : ""}
         </Text>
-        {/* <Text color="primary.500">{}</Text> */}
       </Box>
-    </Box>
+    </Pressable>
   );
 };
 

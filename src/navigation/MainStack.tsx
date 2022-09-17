@@ -6,6 +6,7 @@ import { RootStackParamList } from "./NavigationTypes";
 import routes from "./routes";
 import SavedShowDetails from "../screens/SavedShowDetails";
 import useDataListeners from "./useDataListeners";
+import { SeasonDetails } from "../screens/SeasonDetails";
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -15,6 +16,7 @@ const MainStack: React.FC = () => {
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="Root" component={BottomTabNavigator} />
       <Stack.Screen name={routes.showDetails} component={SavedShowDetails} />
+      <Stack.Screen name={"SeasonDetails"} component={SeasonDetails} />
     </Stack.Navigator>
   );
 };
