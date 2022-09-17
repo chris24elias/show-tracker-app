@@ -74,7 +74,6 @@ const MyCarousel: React.FC<MyCarouselProps> = ({
         loop={false}
         data={data}
         // scrollAnimationDuration={1000}
-        onSnapToItem={(index) => console.log("current index:", index)}
         renderItem={renderItem}
         onProgressChange={(_, absoluteProgress) =>
           (progressValue.value = absoluteProgress)

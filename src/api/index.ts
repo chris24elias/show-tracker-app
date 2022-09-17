@@ -44,27 +44,39 @@ const getImageApiConfig = async () => {
 // };
 
 const getTmdbShowDetails = (tmdbId: number) => {
-  return tmdbAPi.get(
-    `/tv/${tmdbId}?api_key=${TMDB_API_KEY}&append_to_response=videos`
-  );
+  return tmdbAPi
+    .get(`/tv/${tmdbId}?api_key=${TMDB_API_KEY}&append_to_response=videos`)
+    .then((res) => res.data);
 };
 
 const getShowRecommendations = (tmdbId: number) => {
-  return tmdbAPi.get(`/tv/${tmdbId}/recommendations?api_key=${TMDB_API_KEY}`);
+  return tmdbAPi
+    .get(`/tv/${tmdbId}/recommendations?api_key=${TMDB_API_KEY}`)
+    .then((res) => res.data.results);
 };
 
 const getTVGenres = () => {
-  return tmdbAPi.get(`/genre/tv/list?api_key=${TMDB_API_KEY}`);
+  return tmdbAPi
+    .get(`/genre/tv/list?api_key=${TMDB_API_KEY}`)
+    .then((res) => res.data.genres);
 };
 
 const getSeasonDetails = (tvId: string, seasonId: string) => {
-  return tmdbAPi.get(`/tv/${tvId}/season/${seasonId}?api_key=${TMDB_API_KEY}`);
+  return tmdbAPi
+    .get(`/tv/${tvId}/season/${seasonId}?api_key=${TMDB_API_KEY}`)
+    .then((res) => res.data);
+};
+
+type ImageObject = {
+  path: string;
+  height: number;
+  aspect_ratio: number;
 };
 
 const getImagesForShow = (
   tmdbId: number,
   size = 500
-): Promise<{ posters: any[]; backdrops: any[] }> => {
+): Promise<{ posters: ImageObject[]; backdrops: ImageObject[] }> => {
   return new Promise((resolve, reject) => {
     try {
       tmdbAPi
@@ -95,8 +107,8 @@ const getImagesForShow = (
           );
 
           resolve({
-            posters,
-            backdrops,
+            posters: posters.slice(4),
+            backdrops: backdrops.slice(4),
           });
         });
     } catch (error) {

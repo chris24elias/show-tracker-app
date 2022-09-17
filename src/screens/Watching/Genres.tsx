@@ -7,10 +7,7 @@ import Steve from "react-native-steve";
 export type IGenresProps = {};
 
 const Genres: React.FC<IGenresProps> = ({}) => {
-  const TVGenresQuery = useQuery("TVGenres", api.getTVGenres);
-
-  const genres = TVGenresQuery?.data?.data?.genres;
-  console.log("TV", genres);
+  const { data: genres } = useQuery("TVGenres", api.getTVGenres);
   const theme = useTheme();
 
   return (

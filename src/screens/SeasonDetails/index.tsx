@@ -1,34 +1,23 @@
 import { Box, FlatList, Row, Text } from "native-base";
 import React from "react";
 import { Image, View } from "react-native";
-import { useQuery } from "react-query";
 import api from "../../api";
 import AppHeader from "../../components/AppHeader";
-import FloatingBackButton from "../../components/FloatingBackButton";
 import PageLoader from "../../components/PageLoader";
+import { useSeasonDetails } from "../../queries";
 import { Page } from "../../theme";
 
 export type ISeasonDetailsProps = {};
 
-const SeasonDetails: React.FC<ISeasonDetailsProps> = ({
-  route,
-  navigation,
-}) => {
+const SeasonDetails: React.FC<ISeasonDetailsProps> = ({ route }) => {
   const { tvId, seasonId } = route.params;
-  const { data, isLoading, error } = useQuery(
-    ["seasonDetails", tvId, seasonId],
-    () => api.getSeasonDetails(tvId, seasonId)
-  );
-
-  console.log("DATa", data?.data);
-
-  const seasonDetails = data?.data;
+  const { data, isLoading, error } = useSeasonDetails(tvId, seasonId);
 
   if (isLoading) {
     return <PageLoader />;
   }
 
-  const { air_date, episodes, name, poster_path } = seasonDetails;
+  const { air_date, episodes, name, poster_path } = data;
 
   const renderItem = ({ item, index }) => {
     return <Episode {...item} index={index + 1} />;

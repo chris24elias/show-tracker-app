@@ -1,21 +1,6 @@
-import {
-  Box,
-  Text,
-  Heading,
-  Button,
-  Icon,
-  Container,
-  Row,
-  Pressable,
-} from "native-base";
+import { Box, Text, Heading, Button, Icon, Row, Pressable } from "native-base";
 import React from "react";
-
-import {
-  ScrollView,
-  StyleSheet,
-  useWindowDimensions,
-  Image,
-} from "react-native";
+import { ScrollView, useWindowDimensions, Image } from "react-native";
 import Animated, {
   Extrapolate,
   interpolate,
@@ -23,22 +8,22 @@ import Animated, {
   useAnimatedStyle,
   useSharedValue,
 } from "react-native-reanimated";
-import { AntDesign, Feather } from "@expo/vector-icons";
+import { AntDesign } from "@expo/vector-icons";
 import { Recommendation } from "../../utils/types";
 import MyCarousel from "../../components/MyCarousel";
-import PageLoader from "../../components/PageLoader";
 import FloatingBackButton from "../../components/FloatingBackButton";
-import useShowImages from "../../hooks/useShowImages";
-import useShowDetails from "../../hooks/useShowDetails";
 import useDataStore from "../../stores/data";
 import ShowStatus from "./ShowStatus";
-import useShowRecommendations from "../../hooks/useShowRecommendations";
 import ShowCard from "../../components/ShowCard";
 import routes from "../../navigation/routes";
 import { Page } from "../../theme";
 import { addShow, updateStatus } from "../../api/firebase/myShows";
-import RootNavigation from "../../navigation/RootNavigation";
 import VideoPlayer from "../../components/VideoPlayer";
+import {
+  useShowDetails,
+  useShowImages,
+  useShowRecommendations,
+} from "../../queries";
 
 interface SavedShowDetailsProps {
   navigation: any;
@@ -49,22 +34,18 @@ const SavedShowDetails: React.FC<SavedShowDetailsProps> = ({
   navigation,
   route,
 }) => {
+  const { tmdbId } = route.params || {};
+
   const { height, width } = useWindowDimensions();
-  const {
-    // savedShowId, savedShow,
-    tmdbId,
-  } = route.params || {};
   const myShows = useDataStore((state) => state.myShows);
   const savedShow = myShows.find((s) => s.tmdbId === tmdbId);
-  const status = savedShow?.status;
-  const { data, loading } = useShowDetails(tmdbId);
-  const { recommendations } = useShowRecommendations(tmdbId);
-  const { posters, backdrops } = useShowImages(tmdbId);
+  const { data, isLoading } = useShowDetails(tmdbId);
+  const { data: recommendations = [], isLoading: isLoading2 } =
+    useShowRecommendations(tmdbId);
+  const { data: showImages, isLoading: isLoading3 } = useShowImages(tmdbId);
   const scrollY = useSharedValue<number>(0);
   const isScrolling = useSharedValue(false);
-
-  const videos = data?.videos?.results;
-  console.log("data", videos);
+  const status = savedShow?.status;
   const containerSize = height * 0.45;
 
   const onAddToList = () => {
@@ -130,7 +111,7 @@ const SavedShowDetails: React.FC<SavedShowDetailsProps> = ({
     };
   });
 
-  if (loading && !data) {
+  if (isLoading || isLoading2 || isLoading3) {
     return (
       <Page>
         <FloatingBackButton />
@@ -148,6 +129,10 @@ const SavedShowDetails: React.FC<SavedShowDetailsProps> = ({
     overview,
     seasons,
   } = data;
+
+  const backdrops = showImages?.backdrops || [];
+  const posters = showImages?.posters || [];
+  const videos = data?.videos?.results;
 
   return (
     <Page safeAreaBottom>
@@ -216,8 +201,8 @@ const SavedShowDetails: React.FC<SavedShowDetailsProps> = ({
           <Description description={overview} />
           <Seasons seasons={seasons} onSeasonPress={onSeasonPress} />
         </Box>
-        <Box px={5} marginTop={3}>
-          <Heading size="lg" marginBottom={2}>
+        <Box px={5} marginTop={6}>
+          <Heading size="lg" marginBottom={3}>
             Videos
           </Heading>
           <ScrollView horizontal showsHorizontalScrollIndicator={false}>
@@ -321,7 +306,6 @@ const Season = ({
   const poster = poster_path
     ? `https://image.tmdb.org/t/p/w${500}${poster_path}`
     : "https://cdn.shopify.com/s/files/1/0533/2089/files/placeholder-images-image_large.png?format=jpg&quality=90&v=1530129081";
-  console.log("POSTER PATH", poster);
 
   const size = 125;
   const year = air_date ? `(${air_date?.slice(0, 4) || ""})` : "";
