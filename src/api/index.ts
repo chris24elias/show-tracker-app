@@ -19,8 +19,26 @@ export const tmdbAPi = axios.create({
   },
 });
 
+const apiHelper = (path: string, params = {}) => {
+  const allParams: any = { ...params, api_key: TMDB_API_KEY };
+
+  let paramString = "";
+  let entries = Object.entries(allParams);
+
+  for (let i = 0; i < entries.length; i++) {
+    const [key, value] = entries[i];
+    paramString += `${key}=${value}`;
+    if (entries.length - i > 1) {
+      paramString += "&";
+    }
+  }
+
+  return tmdbAPi.get(`${path}?${paramString}`);
+};
+
 const searchTmdbShows = (query: string) => {
-  return tmdbAPi.get(`/search/tv?query=${query}&api_key=${TMDB_API_KEY}`);
+  // return tmdbAPi.get(`/search/tv?query=${query}&api_key=${TMDB_API_KEY}`);
+  return apiHelper("/search/tv", { query });
 };
 
 const getPopularShows = () => {
@@ -33,6 +51,9 @@ const getTopRatedShows = () => {
 
 const getShowsOnTheAir = () => {
   return tmdbAPi.get(`/tv/on_the_air?api_key=${TMDB_API_KEY}`);
+};
+const getAiringTodayShows = () => {
+  return tmdbAPi.get(`/tv/airing_today?language=en&api_key=${TMDB_API_KEY}`);
 };
 
 const getImageApiConfig = async () => {
@@ -119,4 +140,5 @@ export default {
   getUrlForImagePath,
   getTVGenres,
   getSeasonDetails,
+  getAiringTodayShows,
 };

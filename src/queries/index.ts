@@ -19,3 +19,14 @@ export const useSeasonDetails = (tvId: any, seasonId: any) =>
   );
 
 export const useTVGenres = () => useQuery("TVGenres", api.getTVGenres);
+
+export const usePopularShows = () => useQuery("popular", api.getPopularShows);
+
+export const useTopRatedShows = () =>
+  useQuery("topRated", api.getTopRatedShows);
+
+export const useOnTheAirShows = () =>
+  useQuery("onTheAir", api.getShowsOnTheAir);
+
+export const useAiringTodayShows = () =>
+  useQuery("getAiringTodayShows", api.getAiringTodayShows);

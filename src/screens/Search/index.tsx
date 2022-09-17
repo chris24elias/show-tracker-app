@@ -14,6 +14,12 @@ import PageLoader from "../../components/PageLoader";
 import LayoutAnimations from "../../utils/LayoutAnimations";
 import DiscoverSection from "./DiscoverSection";
 import { Page } from "../../theme";
+import {
+  useAiringTodayShows,
+  useOnTheAirShows,
+  usePopularShows,
+  useTopRatedShows,
+} from "../../queries";
 
 interface SearchProps {
   navigation: any;
@@ -42,10 +48,11 @@ const defaultState: State = {
 const Search: React.FC<SearchProps> = ({ navigation }) => {
   const { width, height } = useWindowDimensions();
   const SEARCH_CARD_HEIGHT = width * 0.43;
-  const popularQuery = useQuery("popular", api.getPopularShows);
-  const topRatedQuery = useQuery("topRated", api.getTopRatedShows);
-  const onAirQuery = useQuery("onTheAir", api.getShowsOnTheAir);
-  const queries = [topRatedQuery, popularQuery, onAirQuery];
+  const popularQuery = usePopularShows();
+  const topRatedQuery = useTopRatedShows();
+  const onAirQuery = useOnTheAirShows();
+  const airingToday = useAiringTodayShows();
+  const queries = [topRatedQuery, popularQuery, onAirQuery, airingToday];
   const { control, handleSubmit, watch } = useForm<QueryFormData>({
     defaultValues: { query: "" },
   });
@@ -109,6 +116,7 @@ const Search: React.FC<SearchProps> = ({ navigation }) => {
   const popular = popularQuery?.data.data.results;
   const topRated = topRatedQuery?.data.data.results;
   const onAir = onAirQuery?.data.data.results;
+  const airing = airingToday?.data?.data.results;
 
   return (
     <Page safeAreaTop>
@@ -180,6 +188,11 @@ const Search: React.FC<SearchProps> = ({ navigation }) => {
               id: "3",
               title: "New Epsiodes",
               data: onAir,
+            },
+            {
+              id: "4",
+              title: "Airing Today",
+              data: airing,
             },
           ]}
           keyExtractor={(item) => `row_${item.id}`}
