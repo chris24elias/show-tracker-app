@@ -1,6 +1,8 @@
 import { useEffect } from "react";
 import useAuthStore from "../stores/auth";
-import createListener from "../api/firebase/helpers/createListener";
+import createListener, {
+  createListener2,
+} from "../api/firebase/helpers/createListener";
 import { where } from "../api/firebase/helpers";
 import useDataStore from "../stores/data";
 import { COLLECTIONS } from "../api/firebase/utils";
@@ -16,19 +18,9 @@ const useDataListeners = () => {
     if (!currentUserId) {
       return;
     }
-    const unsub1 = createListener(
-      COLLECTIONS.savedShows,
-      {
-        constraints: where("owner", "==", currentUserId),
-      },
-      setMyShows
-    );
-
-    return () => {
-      [unsub1].forEach((unsub) => {
-        unsub();
-      });
-    };
+    return createListener2(COLLECTIONS.savedShows)
+      .where("owner", "==", currentUserId)
+      .subscribe(setMyShows);
   }, [currentUserId, setMyShows]);
 
   return null;

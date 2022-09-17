@@ -9,6 +9,11 @@ import {
   query,
   orderBy as ORDERBY,
   limit as LIMIT,
+  WhereFilterOp,
+  QueryConstraint,
+  FieldPath,
+  orderBy,
+  limit,
 } from "firebase/firestore";
 import { Constraint, OrderBy } from ".";
 import { firestore } from "../../initFirebase";
@@ -82,3 +87,79 @@ const createListener = (
 };
 
 export default createListener;
+
+class CollectionListener {
+  ref;
+  constraints: QueryConstraint[] = [];
+
+  constructor(path: string) {
+    this.ref = collection(firestore, path);
+  }
+
+  where(fieldPath: string, opStr: WhereFilterOp, value: any) {
+    this.constraints.push(where(fieldPath, opStr, value));
+    return this;
+  }
+
+  orderBy(
+    fieldPath: string | FieldPath,
+    directionStr?: "asc" | "desc" | undefined
+  ) {
+    this.constraints.push(ORDERBY(fieldPath, directionStr));
+    return this;
+  }
+
+  limit(n: number) {
+    this.constraints.push(LIMIT(n));
+    return this;
+  }
+
+  subscribe(callback: (data: any) => void) {
+    const handleData = (querySnapshot: QuerySnapshot) => {
+      const items = querySnapshot?.docs.map((doc: any, index) => {
+        const obj = doc.data();
+
+        return {
+          id: doc.id,
+          ...obj,
+        };
+      });
+      if (callback) {
+        callback(items || []);
+      }
+    };
+
+    const ref = query(this.ref, ...this.constraints);
+
+    const unsubscribe = onSnapshot(ref, handleData);
+    return unsubscribe;
+  }
+}
+
+export const createListener2 = (collectionPath: string) => {
+  return new CollectionListener(collectionPath);
+};
+
+// const ref = collection(firestore, "savedShows");
+// const q = query(
+//   ref,
+//   where("owner", "==", "123123123"),
+//   orderBy("name", "asc"),
+//   limit(10)
+// );
+// const unsub = onSnapshot(q, (querySnapshot: QuerySnapshot) => {
+//   const items = querySnapshot?.docs.map((doc: any, index) => {
+//     const obj = doc.data();
+//     return {
+//       id: doc.id,
+//       ...obj,
+//     };
+//   });
+//   console.log("test", items);
+// });
+
+// const unsub2 = createListener2("savedShows")
+//   .where("owner", "==", "123123123")
+//   .orderBy("name", "asc")
+//   .limit(10)
+//   .subscribe((data) => console.log("Test", data));

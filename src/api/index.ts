@@ -1,19 +1,8 @@
 import axios from "axios";
-import { TMDB_API_KEY, TRAKT_API_KEY } from "../../env";
-
-// const api = axios.create({
-//   baseURL: 'https://api.trakt.tv',
-//   //   timeout: 1000,
-//   headers: {
-//     'Content-Type': 'application/json',
-//     'trakt-api-key': TRAKT_API_KEY,
-//     'trakt-api-version': '2'
-//   }
-// });
+import { TMDB_API_KEY } from "../../env";
 
 export const tmdbAPi = axios.create({
   baseURL: "https://api.themoviedb.org/3",
-  //   timeout: 1000,
   headers: {
     "Content-Type": "application/json",
   },
@@ -53,7 +42,8 @@ const getShowsOnTheAir = () => {
   return tmdbAPi.get(`/tv/on_the_air?api_key=${TMDB_API_KEY}`);
 };
 const getAiringTodayShows = () => {
-  return tmdbAPi.get(`/tv/airing_today?language=en&api_key=${TMDB_API_KEY}`);
+  // return tmdbAPi.get(`/tv/airing_today?language=en&api_key=${TMDB_API_KEY}`);
+  return apiHelper(`/tv/airing_today`, { language: "en-US" });
 };
 
 const getImageApiConfig = async () => {
