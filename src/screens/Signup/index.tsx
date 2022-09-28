@@ -79,7 +79,7 @@ const Signup: React.FC<SignupProps> = ({ navigation }) => {
     <Box flex={1} bg="mainBg.500">
       <AppHeader title="" showBack />
       <Center w="100%">
-        <Box safeArea p="2" w="90%" py="8">
+        <Box p="2" w="90%" py="8">
           <Heading
             size="lg"
             color="coolGray.800"

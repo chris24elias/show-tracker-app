@@ -75,7 +75,7 @@ const Login: React.FC<LoginProps> = ({ navigation }) => {
     <Box flex={1} bg="mainBg.500">
       <AppHeader title="" showBack />
       <Center w="100%">
-        <Box safeArea p="2" py="8" w="90%">
+        <Box p="2" py="8" w="90%">
           <Heading
             size="lg"
             fontWeight="600"
