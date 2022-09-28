@@ -1,7 +1,7 @@
 import { Ionicons } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import * as React from "react";
-import Search from "../screens/Search";
+import Search from "../screens/Discover";
 import SettingsScreen from "../screens/SettingsScreen";
 import Watching from "../screens/Watching";
 import { Colors } from "../theme";
@@ -27,7 +27,7 @@ export default function BottomTabNavigator() {
         options={{
           tabBarLabel: "Watching",
           tabBarIcon: ({ color }) => (
-            <TabBarIcon name="ios-code" color={color} />
+            <Ionicons name="md-tv-outline" size={24} color={color} />
           ),
         }}
       />
@@ -35,9 +35,9 @@ export default function BottomTabNavigator() {
         name={"SearchTab"}
         component={Search}
         options={{
-          tabBarLabel: "Search",
+          tabBarLabel: "Discover",
           tabBarIcon: ({ color }) => (
-            <TabBarIcon name="ios-code" color={color} />
+            <TabBarIcon name="compass-outline" color={color} />
           ),
         }}
       />
@@ -47,7 +47,7 @@ export default function BottomTabNavigator() {
         options={{
           tabBarLabel: "Settings",
           tabBarIcon: ({ color }) => (
-            <TabBarIcon name="ios-code" color={color} />
+            <TabBarIcon name="ios-settings-sharp" color={color} />
           ),
         }}
       />

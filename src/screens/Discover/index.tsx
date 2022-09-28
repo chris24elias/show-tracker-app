@@ -13,7 +13,7 @@ import ShowCard from "../../components/ShowCard";
 import PageLoader from "../../components/PageLoader";
 import LayoutAnimations from "../../utils/LayoutAnimations";
 import DiscoverSection from "./DiscoverSection";
-import { Page } from "../../theme";
+import theme, { Page } from "../../theme";
 import {
   useAiringTodayShows,
   useOnTheAirShows,
@@ -175,7 +175,6 @@ const Search: React.FC<SearchProps> = ({ navigation }) => {
         ) : null}
 
         <FlatList
-          px={3}
           mb={3}
           data={[
             { id: "1", title: "Popular", data: popular },
