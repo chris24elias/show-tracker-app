@@ -3,12 +3,21 @@ import { StyleSheet } from "react-native";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { Box, Button, Center } from "native-base";
+import {
+  Box,
+  Button,
+  Center,
+  FormControl,
+  Heading,
+  Input,
+  VStack,
+} from "native-base";
 import TextInput from "../../components/form/TextInput";
 import { LogError } from "../../utils/Logger";
 import AppHeader from "../../components/AppHeader";
 import strings from "../../strings";
 import useAuthStore from "../../stores/auth";
+import TextInput2 from "../../components/form/TextInput2";
 
 const schema = yup.object().shape({
   name: yup.string().required("name is required"),
@@ -68,46 +77,58 @@ const Signup: React.FC<SignupProps> = ({ navigation }) => {
 
   return (
     <Box flex={1} bg="mainBg.500">
-      <AppHeader title="Signup" showBack />
-      <Center flex={1}>
-        <TextInput
-          w="90%"
-          control={control}
-          name="name"
-          error={errors?.name?.message}
-          label={strings.signup.nameInput}
-          testID="name-input"
-          touched={touchedFields.name}
-        />
-        <TextInput
-          w="90%"
-          control={control}
-          name="email"
-          error={errors?.email?.message}
-          label={strings.signup.emailInput}
-          testID="email-input"
-          touched={touchedFields.email}
-        />
-        <TextInput
-          w="90%"
-          control={control}
-          name="password"
-          error={errors?.password?.message}
-          label={strings.signup.passwordInput}
-          testID="password-input"
-          inputProps={{
-            secureTextEntry: true,
-          }}
-          touched={touchedFields.password}
-        />
-        <Button
-          mt="4"
-          w="90%"
-          bg="secondary.500"
-          onPress={handleSubmit(onSignupPress)}
-        >
-          Signup
-        </Button>
+      <AppHeader title="" showBack />
+      <Center w="100%">
+        <Box safeArea p="2" w="90%" py="8">
+          <Heading
+            size="lg"
+            color="coolGray.800"
+            _dark={{
+              color: "warmGray.50",
+            }}
+            fontWeight="semibold"
+          >
+            Signup
+          </Heading>
+          <VStack space={3} mt="5">
+            <TextInput2
+              control={control}
+              name="name"
+              error={errors?.name?.message}
+              label={strings.signup.nameInput}
+              testID="name-input"
+              touched={touchedFields.name}
+            />
+            <TextInput2
+              control={control}
+              name="email"
+              error={errors?.email?.message}
+              label={strings.signup.emailInput}
+              testID="email-input"
+              touched={touchedFields.email}
+            />
+            <TextInput2
+              control={control}
+              name="password"
+              error={errors?.password?.message}
+              label={strings.signup.passwordInput}
+              testID="password-input"
+              touched={touchedFields.password}
+              type="password"
+            />
+            <Button
+              mt="2"
+              bg="secondary.500"
+              onPress={handleSubmit(onSignupPress)}
+              _text={{
+                fontSize: "md",
+                fontWeight: "semibold",
+              }}
+            >
+              Continue
+            </Button>
+          </VStack>
+        </Box>
       </Center>
     </Box>
   );

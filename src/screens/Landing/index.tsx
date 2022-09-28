@@ -1,6 +1,6 @@
-import { Box, Button, Flex, Heading } from "native-base";
+import { Box, Button, Flex, Heading, Image } from "native-base";
 import React from "react";
-import { StyleSheet } from "react-native";
+import { StyleSheet, useWindowDimensions } from "react-native";
 import routes from "../../navigation/routes";
 
 interface LandingProps {
@@ -8,10 +8,20 @@ interface LandingProps {
 }
 
 const Landing: React.FC<LandingProps> = ({ navigation }) => {
+  const window = useWindowDimensions();
   return (
     <Box flex={1} bg="mainBg.500" safeAreaBottom>
       <Flex flex={1} justifyContent="center" alignItems="center">
-        <Heading size="2xl">Show Tracker :)</Heading>
+        {/* <Heading fontSize={84}>Show Tracker</Heading> */}
+        <Image
+          source={require("../../assets/images/ShowTracker.png")}
+          resizeMode="contain"
+          style={{
+            // height: 700,
+            width: window.width * 0.7,
+          }}
+          alt="logo"
+        />
       </Flex>
       <Button
         _text={{
