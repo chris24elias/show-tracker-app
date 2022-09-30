@@ -18,11 +18,16 @@ const SearchBar: React.FC<SearchBarProps> = ({ control, name, ...rest }) => {
         <SearchBarElements
           containerStyle={{
             backgroundColor: "transparent",
-            width: "95%",
+            width: "100%",
             alignSelf: "center",
+            // minHeight: 30,
+            height: 35,
+            borderRadius: 12,
           }}
           inputContainerStyle={{
             backgroundColor: Colors.mainBg[300],
+            marginLeft: 0,
+            marginRight: 0,
           }}
           inputStyle={{
             color: Colors.white,

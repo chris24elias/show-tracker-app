@@ -133,17 +133,20 @@ const Search: React.FC<SearchProps> = ({ navigation }) => {
             icon={<Icon as={<AntDesign name="filter" />} size="sm" color="white" />}
           /> */}
       </Box>
-      <SearchBar
-        control={control}
-        name="query"
-        onSubmitEditing={() => {
-          handleSubmit(searchShows)();
-        }}
-        onFocus={() => onSearchBlurFocus(true)}
-        onBlur={() => {
-          onSearchBlurFocus(false);
-        }}
-      />
+      <Box px="3">
+        <SearchBar
+          control={control}
+          name="query"
+          onSubmitEditing={() => {
+            handleSubmit(searchShows)();
+          }}
+          onFocus={() => onSearchBlurFocus(true)}
+          onBlur={() => {
+            onSearchBlurFocus(false);
+          }}
+        />
+      </Box>
+
       <Box flex={1}>
         {state.searchFocused || query.length > 0 ? (
           <Box

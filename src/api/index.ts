@@ -87,7 +87,11 @@ type ImageObject = {
 const getImagesForShow = async (
   tmdbId: number,
   size = 500
-): Promise<{ posters: ImageObject[]; backdrops: ImageObject[] }> => {
+): Promise<{
+  posters: ImageObject[];
+  backdrops: ImageObject[];
+  logos: ImageObject[];
+}> => {
   try {
     const response = await tmdbAPi.get(
       `/tv/${tmdbId}/images?api_key=${TMDB_API_KEY}`
