@@ -1,4 +1,8 @@
-## Show Tracker App
+# Show Tracker App
+
+<p float="left">
+  <img src="screenshots/cover.jpeg" width="100%" style="margin-bottom:5px" />
+</p>
 
 ### React Native app that allows users to search for TV shows and keep track of what they're currently watching or plan to watch, plus more.
 
