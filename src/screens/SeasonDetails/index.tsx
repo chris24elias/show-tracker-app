@@ -1,27 +1,28 @@
-import { Box, FlatList, Row, Text } from "native-base";
-import React from "react";
-import { Image, View } from "react-native";
-import api from "../../api";
-import AppHeader from "../../components/AppHeader";
-import PageLoader from "../../components/PageLoader";
-import { useSeasonDetails } from "../../queries";
-import { Page } from "../../theme";
+import { Box, FlatList, Row, Text } from 'native-base'
+import React from 'react'
+import { Image } from 'react-native'
 
-export type ISeasonDetailsProps = {};
+import api from '../../api'
+import AppHeader from '../../components/AppHeader'
+import PageLoader from '../../components/PageLoader'
+import { useSeasonDetails } from '../../queries'
+import { Page } from '../../theme'
+
+export type ISeasonDetailsProps = {}
 
 const SeasonDetails: React.FC<ISeasonDetailsProps> = ({ route }) => {
-  const { tvId, seasonId } = route.params;
-  const { data, isLoading, error } = useSeasonDetails(tvId, seasonId);
+  const { tvId, seasonId } = route.params
+  const { data, isLoading, error } = useSeasonDetails(tvId, seasonId)
 
   if (isLoading) {
-    return <PageLoader />;
+    return <PageLoader />
   }
 
-  const { air_date, episodes, name, poster_path } = data;
+  const { air_date, episodes, name, poster_path } = data
 
   const renderItem = ({ item, index }) => {
-    return <Episode {...item} index={index + 1} />;
-  };
+    return <Episode {...item} index={index + 1} />
+  }
 
   return (
     <Page>
@@ -34,24 +35,24 @@ const SeasonDetails: React.FC<ISeasonDetailsProps> = ({ route }) => {
         renderItem={renderItem}
       />
     </Page>
-  );
-};
+  )
+}
 
 const Episode = ({ name, still_path, runtime, overview, index }) => {
-  const imageSize = 90;
+  const imageSize = 90
   return (
     <Box mb="5">
       <Row>
         <Image
           source={{
-            uri: api.getUrlForImagePath(still_path),
+            uri: api.getUrlForImagePath(still_path)
           }}
           resizeMode="contain"
           style={{
             height: imageSize,
             width: imageSize * 1.78,
             borderRadius: 12,
-            backgroundColor: "#000000",
+            backgroundColor: '#000000'
           }}
         />
         <Box px="2" flex={1} justifyContent="center">
@@ -67,7 +68,7 @@ const Episode = ({ name, still_path, runtime, overview, index }) => {
         {overview}
       </Text>
     </Box>
-  );
-};
+  )
+}
 
-export { SeasonDetails };
+export { SeasonDetails }

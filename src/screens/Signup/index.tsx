@@ -1,50 +1,41 @@
-import React from "react";
-import { StyleSheet } from "react-native";
-import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
-import {
-  Box,
-  Button,
-  Center,
-  FormControl,
-  Heading,
-  Input,
-  VStack,
-} from "native-base";
-import TextInput from "../../components/form/TextInput";
-import { LogError } from "../../utils/Logger";
-import AppHeader from "../../components/AppHeader";
-import strings from "../../strings";
-import useAuthStore from "../../stores/auth";
-import TextInput2 from "../../components/form/TextInput2";
+import { yupResolver } from '@hookform/resolvers/yup'
+import { Box, Button, Center, Heading, VStack } from 'native-base'
+import React from 'react'
+import { useForm } from 'react-hook-form'
+import * as yup from 'yup'
+
+import AppHeader from '../../components/AppHeader'
+import TextInput2 from '../../components/form/TextInput2'
+import useAuthStore from '../../stores/auth'
+import strings from '../../strings'
+import { LogError } from '../../utils/Logger'
 
 const schema = yup.object().shape({
-  name: yup.string().required("name is required"),
+  name: yup.string().required('name is required'),
   email: yup
     .string()
-    .email("please enter a valid email address")
-    .required("email address is required"),
+    .email('please enter a valid email address')
+    .required('email address is required'),
   password: yup
     .string()
-    .required("password is required")
-    .min(6, "Password should be at least 6 characters"),
-});
+    .required('password is required')
+    .min(6, 'Password should be at least 6 characters')
+})
 
 const defaultValues = {
   name: ``,
   email: ``,
-  password: "",
-};
+  password: ''
+}
 
 type SignupFormData = {
-  name: string;
-  email: string;
-  password: string;
-};
+  name: string
+  email: string
+  password: string
+}
 
 interface SignupProps {
-  navigation: any;
+  navigation: any
 }
 
 const Signup: React.FC<SignupProps> = ({ navigation }) => {
@@ -52,28 +43,28 @@ const Signup: React.FC<SignupProps> = ({ navigation }) => {
     control,
     handleSubmit,
     formState: { errors, touchedFields },
-    setError,
+    setError
   } = useForm<SignupFormData>({
     defaultValues,
     resolver: yupResolver(schema),
-    mode: "onBlur",
-  });
-  const signup = useAuthStore((state) => state.signup);
+    mode: 'onBlur'
+  })
+  const signup = useAuthStore((state) => state.signup)
 
   const onSignupPress = ({ name, email, password }: SignupFormData) => {
     signup(name, email, password)
       .then(() => {
-        console.log("LOGGED IN");
+        console.log('LOGGED IN')
       })
       .catch((e) => {
-        LogError("LOGIN ERROR", e);
+        LogError('LOGIN ERROR', e)
 
         // check type of error and display accordingly
-        setError("password", {
-          message: "Invalid Email or Password",
-        });
-      });
-  };
+        setError('password', {
+          message: 'Invalid Email or Password'
+        })
+      })
+  }
 
   return (
     <Box flex={1} bg="mainBg.500">
@@ -84,7 +75,7 @@ const Signup: React.FC<SignupProps> = ({ navigation }) => {
             size="lg"
             color="coolGray.800"
             _dark={{
-              color: "warmGray.50",
+              color: 'warmGray.50'
             }}
             fontWeight="semibold"
           >
@@ -121,8 +112,8 @@ const Signup: React.FC<SignupProps> = ({ navigation }) => {
               bg="secondary.500"
               onPress={handleSubmit(onSignupPress)}
               _text={{
-                fontSize: "md",
-                fontWeight: "semibold",
+                fontSize: 'md',
+                fontWeight: 'semibold'
               }}
             >
               Continue
@@ -131,7 +122,7 @@ const Signup: React.FC<SignupProps> = ({ navigation }) => {
         </Box>
       </Center>
     </Box>
-  );
-};
+  )
+}
 
-export default Signup;
+export default Signup

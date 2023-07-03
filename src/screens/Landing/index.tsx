@@ -1,36 +1,37 @@
-import { Box, Button, Flex, Heading, Image } from "native-base";
-import React from "react";
-import { StyleSheet, useWindowDimensions } from "react-native";
-import routes from "../../navigation/routes";
+import { Box, Button, Flex, Image } from 'native-base'
+import React from 'react'
+import { StyleSheet, useWindowDimensions } from 'react-native'
+
+import routes from '../../navigation/routes'
 
 interface LandingProps {
-  navigation: any;
+  navigation: any
 }
 
 const Landing: React.FC<LandingProps> = ({ navigation }) => {
-  const window = useWindowDimensions();
+  const window = useWindowDimensions()
   return (
     <Box flex={1} bg="mainBg.500" safeAreaBottom>
       <Flex flex={1} justifyContent="center" alignItems="center">
         {/* <Heading fontSize={84}>Show Tracker</Heading> */}
         <Image
-          source={require("../../assets/images/ShowTracker.png")}
+          source={require('../../assets/images/ShowTracker.png')}
           resizeMode="contain"
           style={{
             // height: 700,
-            width: window.width * 0.7,
+            width: window.width * 0.7
           }}
           alt="logo"
         />
       </Flex>
       <Button
         _text={{
-          fontSize: "lg",
-          fontWeight: "semibold",
+          fontSize: 'lg',
+          fontWeight: 'semibold'
         }}
         _pressed={{
-          bg: "secondary.500",
-          opacity: 0.8,
+          bg: 'secondary.500',
+          opacity: 0.8
         }}
         bg="secondary.500"
         width="90%"
@@ -42,8 +43,8 @@ const Landing: React.FC<LandingProps> = ({ navigation }) => {
       </Button>
       <Button
         _text={{
-          color: "white",
-          fontSize: "xs",
+          color: 'white',
+          fontSize: 'xs'
         }}
         width="90%"
         variant="ghost"
@@ -54,9 +55,9 @@ const Landing: React.FC<LandingProps> = ({ navigation }) => {
         Already have an account? Login
       </Button>
     </Box>
-  );
-};
+  )
+}
 
-export default Landing;
+export default Landing
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({})

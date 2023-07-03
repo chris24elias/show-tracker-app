@@ -1,23 +1,24 @@
-import React from "react";
-import create from "zustand";
-import { persist } from "zustand/middleware";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import api from "../api";
-import { SavedShow } from "../utils/types";
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import React from 'react'
+import create from 'zustand'
+import { persist } from 'zustand/middleware'
+
+import api from '../api'
+import type { SavedShow } from '../utils/types'
 
 interface DataStore {
   config:
     | {
-        base_url: string;
-        poster_sizes: string[];
+        base_url: string
+        poster_sizes: string[]
       }
-    | undefined;
-  myShows: SavedShow[];
-  setMyShows: (data: any) => void;
-  getImageConfig: () => void;
+    | undefined
+  myShows: SavedShow[]
+  setMyShows: (data: any) => void
+  getImageConfig: () => void
 }
 
-const isFetching: React.MutableRefObject<boolean | null> = React.createRef();
+const isFetching: React.MutableRefObject<boolean | null> = React.createRef()
 
 const useDataStore = create<DataStore>()(
   persist(
@@ -26,31 +27,31 @@ const useDataStore = create<DataStore>()(
       myShows: [],
       setMyShows: (data: any) => {
         set({
-          myShows: data,
-        });
+          myShows: data
+        })
       },
       getImageConfig: async () => {
         try {
-          const result = await api.getImageApiConfig();
+          const result = await api.getImageApiConfig()
           // console.log("IMAGE CONFIG RESULT", result.data);
           // const { base_url, poster_sizes } = result.data.images;
           set({
-            config: result.data.images,
-          });
+            config: result.data.images
+          })
         } catch (error) {
-          console.log("error getting image config", error);
+          console.log('error getting image config', error)
         }
-      },
+      }
     }),
     {
-      name: "Data-storage", // unique name
+      name: 'Data-storage', // unique name
       getStorage: () => AsyncStorage, // (optional) by default the 'localStorage' is used
       onRehydrateStorage: () => {
-        return () => {};
-      },
+        return () => {}
+      }
     }
   )
-);
+)
 
 // const logError = (error) => {
 //   if (error.response) {
@@ -71,5 +72,5 @@ const useDataStore = create<DataStore>()(
 //   console.log(error.config);
 // };
 
-export default useDataStore;
-useDataStore.getState().getImageConfig();
+export default useDataStore
+useDataStore.getState().getImageConfig()

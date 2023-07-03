@@ -1,57 +1,55 @@
-import React, { useState, useEffect } from "react";
-import { LogError } from "../../../utils/Logger";
-import { doc, onSnapshot, getDoc } from "firebase/firestore";
-import { firestore } from "../../initFirebase";
+import { doc, getDoc, onSnapshot } from 'firebase/firestore'
+import { useEffect, useState } from 'react'
+
+import { LogError } from '../../../utils/Logger'
+import { firestore } from '../../initFirebase'
 
 interface UseDocumentProps {
-  doc: string;
-  collection: string;
+  doc: string
+  collection: string
 }
 
 interface Options {
-  subscribe?: boolean;
+  subscribe?: boolean
 }
 
 const defaultOptions = {
-  subscribe: false,
-};
+  subscribe: false
+}
 
-const useDocument = <T>(
-  docPath: string,
-  options?: Options
-): { document: T; loading: boolean } => {
-  const [document, setDocument] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
-  const { subscribe }: Options = { ...defaultOptions, ...options };
+const useDocument = <T>(docPath: string, options?: Options): { document: T; loading: boolean } => {
+  const [document, setDocument] = useState<any>(null)
+  const [loading, setLoading] = useState(true)
+  const { subscribe }: Options = { ...defaultOptions, ...options }
 
   const handleError = (error) => {
-    setLoading(false);
-    LogError("use document error", error);
-  };
+    setLoading(false)
+    LogError('use document error', error)
+  }
 
   useEffect(() => {
-    const ref = doc(firestore, docPath);
-    let unsubscribe = () => {};
+    const ref = doc(firestore, docPath)
+    let unsubscribe = () => {}
 
     const handleData = (snapshot) => {
-      const obj = { ...snapshot.data(), id: doc };
-      setDocument(obj);
-      setLoading(false);
-    };
-
-    if (subscribe) {
-      unsubscribe = onSnapshot(ref, handleData, handleError);
-    } else {
-      getDoc(ref).then(handleData).catch(handleError);
+      const obj = { ...snapshot.data(), id: doc }
+      setDocument(obj)
+      setLoading(false)
     }
 
-    return unsubscribe;
-  }, [doc, subscribe]);
+    if (subscribe) {
+      unsubscribe = onSnapshot(ref, handleData, handleError)
+    } else {
+      getDoc(ref).then(handleData).catch(handleError)
+    }
+
+    return unsubscribe
+  }, [doc, subscribe])
 
   return {
     document,
-    loading,
-  };
-};
+    loading
+  }
+}
 
-export default useDocument;
+export default useDocument

@@ -1,23 +1,15 @@
-import React from "react";
-import { StyleSheet, TextInput as RNInput, TextInputProps } from "react-native";
-import { Controller, Control } from "react-hook-form";
-import {
-  Box,
-  IInputProps,
-  Text,
-  Center,
-  IBoxProps,
-  useTheme,
-  FormControl,
-  Input,
-} from "native-base";
+import type { IInputProps } from 'native-base'
+import { FormControl, Input, useTheme } from 'native-base'
+import React from 'react'
+import type { Control } from 'react-hook-form'
+import { Controller } from 'react-hook-form'
 
 interface ITextInputProps extends IInputProps {
-  control: Control<any>;
-  name: string;
-  label: string;
-  error?: string;
-  touched: boolean | undefined;
+  control: Control<any>
+  name: string
+  label: string
+  error?: string
+  touched: boolean | undefined
 }
 
 const TextInput2: React.FC<ITextInputProps> = ({
@@ -29,9 +21,9 @@ const TextInput2: React.FC<ITextInputProps> = ({
   children,
   ...rest
 }) => {
-  const isSuccess = touched && !error;
-  const isError = error;
-  const { colors } = useTheme();
+  const isSuccess = touched && !error
+  const isError = error
+  const { colors } = useTheme()
   return (
     <Controller
       control={control}
@@ -50,7 +42,7 @@ const TextInput2: React.FC<ITextInputProps> = ({
       )}
       name={name}
     />
-  );
-};
+  )
+}
 
-export default TextInput2;
+export default TextInput2

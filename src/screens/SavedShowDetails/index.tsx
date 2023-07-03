@@ -1,122 +1,105 @@
-import { Box, Text, Heading, Button, Icon, Row, Pressable } from "native-base";
-import React from "react";
-import { ScrollView, useWindowDimensions, Image } from "react-native";
+import { AntDesign } from '@expo/vector-icons'
+import { Box, Button, Heading, Icon, Pressable, Row, Text } from 'native-base'
+import React from 'react'
+import { Image, ScrollView, useWindowDimensions } from 'react-native'
 import Animated, {
   Extrapolate,
   interpolate,
   useAnimatedScrollHandler,
   useAnimatedStyle,
-  useSharedValue,
-} from "react-native-reanimated";
-import { AntDesign } from "@expo/vector-icons";
-import { Recommendation } from "../../utils/types";
-import MyCarousel from "../../components/MyCarousel";
-import FloatingBackButton from "../../components/FloatingBackButton";
-import useDataStore from "../../stores/data";
-import ShowStatus from "./ShowStatus";
-import ShowCard from "../../components/ShowCard";
-import routes from "../../navigation/routes";
-import { Page } from "../../theme";
-import { addShow, updateStatus } from "../../api/firebase/myShows";
-import VideoPlayer from "../../components/VideoPlayer";
-import {
-  useShowDetails,
-  useShowImages,
-  useShowRecommendations,
-} from "../../queries";
+  useSharedValue
+} from 'react-native-reanimated'
+
+import { addShow, updateStatus } from '../../api/firebase/myShows'
+import FloatingBackButton from '../../components/FloatingBackButton'
+import MyCarousel from '../../components/MyCarousel'
+import ShowCard from '../../components/ShowCard'
+import VideoPlayer from '../../components/VideoPlayer'
+import routes from '../../navigation/routes'
+import { useShowDetails, useShowImages, useShowRecommendations } from '../../queries'
+import useDataStore from '../../stores/data'
+import { Page } from '../../theme'
+import type { Recommendation } from '../../utils/types'
+import ShowStatus from './ShowStatus'
 
 interface SavedShowDetailsProps {
-  navigation: any;
-  route: any;
+  navigation: any
+  route: any
 }
 
-const SavedShowDetails: React.FC<SavedShowDetailsProps> = ({
-  navigation,
-  route,
-}) => {
-  const { tmdbId } = route.params || {};
+const SavedShowDetails: React.FC<SavedShowDetailsProps> = ({ navigation, route }) => {
+  const { tmdbId } = route.params || {}
 
-  const { height, width } = useWindowDimensions();
-  const myShows = useDataStore((state) => state.myShows);
-  const savedShow = myShows.find((s) => s.tmdbId === tmdbId);
-  const { data, isLoading } = useShowDetails(tmdbId);
-  const { data: recommendations = [], isLoading: isLoading2 } =
-    useShowRecommendations(tmdbId);
-  const { data: showImages, isLoading: isLoading3 } = useShowImages(tmdbId);
-  const scrollY = useSharedValue<number>(0);
-  const isScrolling = useSharedValue(false);
-  const status = savedShow?.status;
-  const containerSize = height * 0.45;
+  const { height, width } = useWindowDimensions()
+  const myShows = useDataStore((state) => state.myShows)
+  const savedShow = myShows.find((s) => s.tmdbId === tmdbId)
+  const { data, isLoading } = useShowDetails(tmdbId)
+  const { data: recommendations = [], isLoading: isLoading2 } = useShowRecommendations(tmdbId)
+  const { data: showImages, isLoading: isLoading3 } = useShowImages(tmdbId)
+  const scrollY = useSharedValue<number>(0)
+  const isScrolling = useSharedValue(false)
+  const status = savedShow?.status
+  const containerSize = height * 0.45
 
   const onAddToList = () => {
     // eslint-disable-next-line
     const { poster_path, name, first_air_date } = data;
     addShow({
-      status: "watching",
+      status: 'watching',
       tmdbId,
       poster_path,
       name,
-      first_air_date,
-    });
-  };
+      first_air_date
+    })
+  }
 
   const onSeasonPress = (id: string) => {
-    navigation.navigate("SeasonDetails", { tvId: tmdbId, seasonId: id });
-  };
+    navigation.navigate('SeasonDetails', { tvId: tmdbId, seasonId: id })
+  }
 
   const onStatusChange = (newStatus) => {
-    updateStatus(savedShow?.id, newStatus);
-  };
+    updateStatus(savedShow?.id, newStatus)
+  }
 
   const onRecommendationPress = (r: Recommendation) => {
     navigation.push(routes.showDetails, {
-      tmdbId: r.id,
-    });
-  };
+      tmdbId: r.id
+    })
+  }
 
   const scrollHandler = useAnimatedScrollHandler({
     onScroll: (event) => {
-      scrollY.value = event.contentOffset.y;
+      scrollY.value = event.contentOffset.y
     },
     onBeginDrag: (e) => {
-      isScrolling.value = true;
+      isScrolling.value = true
     },
     onEndDrag: (e) => {
-      isScrolling.value = false;
-    },
-  });
+      isScrolling.value = false
+    }
+  })
 
   const animatedStyle = useAnimatedStyle(() => {
     return {
       transform: [
         {
-          scale: interpolate(
-            scrollY.value,
-            [-100, 0, 280],
-            [1.4, 1.1, 1],
-            Extrapolate.CLAMP
-          ),
+          scale: interpolate(scrollY.value, [-100, 0, 280], [1.4, 1.1, 1], Extrapolate.CLAMP)
         },
         {
-          translateY: interpolate(
-            scrollY.value,
-            [0, 280],
-            [0, -100],
-            Extrapolate.CLAMP
-          ),
-        },
+          translateY: interpolate(scrollY.value, [0, 280], [0, -100], Extrapolate.CLAMP)
+        }
       ],
       opacity: interpolate(scrollY.value, [0, 280], [1, 0], Extrapolate.CLAMP),
-      zIndex: scrollY.value > 2 ? -2 : 2,
-    };
-  });
+      zIndex: scrollY.value > 2 ? -2 : 2
+    }
+  })
 
   if (isLoading || isLoading2 || isLoading3) {
     return (
       <Page>
         <FloatingBackButton />
       </Page>
-    );
+    )
   }
 
   // eslint-disable-next-line
@@ -130,9 +113,9 @@ const SavedShowDetails: React.FC<SavedShowDetailsProps> = ({
     seasons,
   } = data;
 
-  const backdrops = showImages?.backdrops || [];
-  const posters = showImages?.posters || [];
-  const videos = data?.videos?.results;
+  const backdrops = showImages?.backdrops || []
+  const posters = showImages?.posters || []
+  const videos = data?.videos?.results
 
   return (
     <Page safeAreaBottom>
@@ -141,19 +124,15 @@ const SavedShowDetails: React.FC<SavedShowDetailsProps> = ({
       <Animated.View
         style={[
           {
-            position: "absolute",
+            position: 'absolute',
             height: containerSize,
-            width: "100%",
-            overflow: "hidden",
+            width: '100%',
+            overflow: 'hidden'
           },
-          animatedStyle,
+          animatedStyle
         ]}
       >
-        <MyCarousel
-          data={posters}
-          containerSize={containerSize}
-          containerWidth={width}
-        />
+        <MyCarousel data={posters} containerSize={containerSize} containerWidth={width} />
       </Animated.View>
 
       <Animated.ScrollView
@@ -171,8 +150,8 @@ const SavedShowDetails: React.FC<SavedShowDetailsProps> = ({
               <Rating rating={vote_average} />
 
               <Text fontSize="md" color="primary.500">
-                {first_air_date?.slice(0, 4)} •{" "}
-                {episode_run_time ? episode_run_time[0] : ""} min per episode
+                {first_air_date?.slice(0, 4)} • {episode_run_time ? episode_run_time[0] : ''} min
+                per episode
               </Text>
             </Row>
 
@@ -188,13 +167,7 @@ const SavedShowDetails: React.FC<SavedShowDetailsProps> = ({
             </Row>
           </Box>
         </Box>
-        <Box
-          flexDirection="row"
-          justifyContent="center"
-          alignItems="center"
-          px={5}
-          marginTop={3}
-        >
+        <Box flexDirection="row" justifyContent="center" alignItems="center" px={5} marginTop={3}>
           <Genres genres={genres} />
         </Box>
         <Box px={5} marginTop={3}>
@@ -208,8 +181,8 @@ const SavedShowDetails: React.FC<SavedShowDetailsProps> = ({
           <ScrollView horizontal showsHorizontalScrollIndicator={false}>
             {videos &&
               videos.map((video) => {
-                if (video.site === "YouTube") {
-                  return <VideoPlayer key={video.id} video={video} />;
+                if (video.site === 'YouTube') {
+                  return <VideoPlayer key={video.id} video={video} />
                 }
               })}
           </ScrollView>
@@ -225,22 +198,17 @@ const SavedShowDetails: React.FC<SavedShowDetailsProps> = ({
         </Box>
       </Animated.ScrollView>
     </Page>
-  );
-};
+  )
+}
 
 const Rating = ({ rating }) => {
   return (
-    <Box
-      flexDirection="row"
-      justifyContent="center"
-      alignItems="center"
-      marginRight={2}
-    >
+    <Box flexDirection="row" justifyContent="center" alignItems="center" marginRight={2}>
       <Icon as={<AntDesign name="star" />} color="yellow.500" marginRight={2} />
       <Text fontWeight="bold">{rating?.toFixed(2)}</Text>
     </Box>
-  );
-};
+  )
+}
 
 const Genres = ({ genres }) => {
   return (
@@ -259,16 +227,16 @@ const Genres = ({ genres }) => {
           >
             <Text color="white">{name}</Text>
           </Box>
-        );
+        )
       })}
     </ScrollView>
     // </Box>
-  );
-};
+  )
+}
 
 const Description = ({ description }) => {
-  return <Text>{description}</Text>;
-};
+  return <Text>{description}</Text>
+}
 
 const Seasons = ({ seasons, onSeasonPress }) => {
   return (
@@ -279,19 +247,13 @@ const Seasons = ({ seasons, onSeasonPress }) => {
       <Box mt="3">
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
           {seasons.map((s) => {
-            return (
-              <Season
-                key={s.id}
-                {...s}
-                onSeasonPress={() => onSeasonPress(s.season_number)}
-              />
-            );
+            return <Season key={s.id} {...s} onSeasonPress={() => onSeasonPress(s.season_number)} />
           })}
         </ScrollView>
       </Box>
     </Box>
-  );
-};
+  )
+}
 
 const Season = ({
   air_date,
@@ -301,14 +263,14 @@ const Season = ({
   overview,
   poster_path,
   season_number,
-  onSeasonPress,
+  onSeasonPress
 }) => {
   const poster = poster_path
     ? `https://image.tmdb.org/t/p/w${500}${poster_path}`
-    : "https://cdn.shopify.com/s/files/1/0533/2089/files/placeholder-images-image_large.png?format=jpg&quality=90&v=1530129081";
+    : 'https://cdn.shopify.com/s/files/1/0533/2089/files/placeholder-images-image_large.png?format=jpg&quality=90&v=1530129081'
 
-  const size = 125;
-  const year = air_date ? `(${air_date?.slice(0, 4) || ""})` : "";
+  const size = 125
+  const year = air_date ? `(${air_date?.slice(0, 4) || ''})` : ''
 
   return (
     <Pressable
@@ -317,7 +279,7 @@ const Season = ({
       // alignItems="center"
       marginRight={5}
       style={{
-        width: size,
+        width: size
       }}
 
       // borderWidth={1}
@@ -330,7 +292,7 @@ const Season = ({
         style={{
           height: size * 1.41,
           width: size,
-          borderRadius: 12,
+          borderRadius: 12
         }}
         resizeMode="cover"
       />
@@ -346,12 +308,12 @@ const Season = ({
           {name}
         </Text>
         <Text fontSize="xs" fontWeight="light" color="primary.500">
-          {episode_count} Episodes{year ? ` - ${year}` : ""}
+          {episode_count} Episodes{year ? ` - ${year}` : ''}
         </Text>
       </Box>
     </Pressable>
-  );
-};
+  )
+}
 
 // const Seasons = ({ seasons }) => {
 //   return (
@@ -415,15 +377,15 @@ const ProgressBar = () => {
     >
       <Box height="100%" width="0%" bg="secondary.500" />
     </Box>
-  );
-};
+  )
+}
 
 const Recommendations = ({
   recommendations,
-  onRecommendationPress,
+  onRecommendationPress
 }: {
-  recommendations: Recommendation[];
-  onRecommendationPress: any;
+  recommendations: Recommendation[]
+  onRecommendationPress: any
 }) => {
   return (
     <ScrollView horizontal showsHorizontalScrollIndicator={false}>
@@ -431,7 +393,7 @@ const Recommendations = ({
         return (
           <ShowCard
             style={{
-              marginRight: 15,
+              marginRight: 15
             }}
             key={r.id}
             size={100}
@@ -440,10 +402,10 @@ const Recommendations = ({
             title={r.name}
             year={r.first_air_date}
           />
-        );
+        )
       })}
     </ScrollView>
-  );
-};
+  )
+}
 
-export default SavedShowDetails;
+export default SavedShowDetails

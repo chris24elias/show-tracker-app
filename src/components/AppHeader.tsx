@@ -1,59 +1,42 @@
-import React from "react";
-import { StyleSheet, useWindowDimensions } from "react-native";
-import { HStack, IconButton, Icon, Text, Box, StatusBar } from "native-base";
-import { MaterialIcons, Feather } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
-import { Colors } from "../theme";
+import { Feather, MaterialIcons } from '@expo/vector-icons'
+import { useNavigation } from '@react-navigation/native'
+import { Box, HStack, Icon, IconButton, StatusBar, Text } from 'native-base'
+import React from 'react'
+import { StyleSheet, useWindowDimensions } from 'react-native'
+
+import { Colors } from '../theme'
 
 interface AppHeaderProps {
-  title: string;
-  showBack?: boolean;
-  showMenu?: boolean;
-  renderRight?: any;
+  title: string
+  showBack?: boolean
+  showMenu?: boolean
+  renderRight?: any
 }
 
-const AppHeader: React.FC<AppHeaderProps> = ({
-  title,
-  showBack,
-  showMenu,
-  renderRight,
-}) => {
-  const { height } = useWindowDimensions();
-  const navigation = useNavigation();
+const AppHeader: React.FC<AppHeaderProps> = ({ title, showBack, showMenu, renderRight }) => {
+  const { height } = useWindowDimensions()
+  const navigation = useNavigation()
   const renderLeft = () => {
     if (showBack) {
       return (
         <IconButton
           onPress={() => navigation.goBack()}
-          icon={
-            <Icon
-              size="md"
-              as={<Feather name="chevron-left" />}
-              color="white"
-            />
-          }
+          icon={<Icon size="md" as={<Feather name="chevron-left" />} color="white" />}
         />
-      );
+      )
     }
     if (showMenu) {
       return (
-        <IconButton
-          icon={
-            <Icon size="sm" as={<MaterialIcons name="menu" />} color="white" />
-          }
-        />
-      );
+        <IconButton icon={<Icon size="sm" as={<MaterialIcons name="menu" />} color="white" />} />
+      )
     }
 
-    return null;
-  };
+    return null
+  }
 
   return (
     <>
-      <StatusBar
-        backgroundColor={Colors.mainBg[500]}
-        barStyle="light-content"
-      />
+      <StatusBar backgroundColor={Colors.mainBg[500]} barStyle="light-content" />
 
       <Box safeAreaTop backgroundColor={Colors.mainBg[500]} />
 
@@ -74,9 +57,9 @@ const AppHeader: React.FC<AppHeaderProps> = ({
         <HStack space={2}>{renderRight ? renderRight() : null}</HStack>
       </HStack>
     </>
-  );
-};
+  )
+}
 
-export default AppHeader;
+export default AppHeader
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({})

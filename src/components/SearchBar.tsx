@@ -1,13 +1,15 @@
-import React from "react";
-import { StyleSheet } from "react-native";
-import { IInputProps } from "native-base";
-import { SearchBar as SearchBarElements } from "react-native-elements";
-import { Control, Controller } from "react-hook-form";
-import { Colors } from "../theme";
+import type { IInputProps } from 'native-base'
+import React from 'react'
+import type { Control } from 'react-hook-form'
+import { Controller } from 'react-hook-form'
+import { StyleSheet } from 'react-native'
+import { SearchBar as SearchBarElements } from 'react-native-elements'
+
+import { Colors } from '../theme'
 
 interface SearchBarProps extends IInputProps {
-  control: Control<any>;
-  name: string;
+  control: Control<any>
+  name: string
 }
 
 const SearchBar: React.FC<SearchBarProps> = ({ control, name, ...rest }) => {
@@ -17,20 +19,20 @@ const SearchBar: React.FC<SearchBarProps> = ({ control, name, ...rest }) => {
       render={({ field: { onChange, onBlur, value } }) => (
         <SearchBarElements
           containerStyle={{
-            backgroundColor: "transparent",
-            width: "100%",
-            alignSelf: "center",
+            backgroundColor: 'transparent',
+            width: '100%',
+            alignSelf: 'center',
             // minHeight: 30,
             height: 35,
-            borderRadius: 12,
+            borderRadius: 12
           }}
           inputContainerStyle={{
             backgroundColor: Colors.mainBg[300],
             marginLeft: 0,
-            marginRight: 0,
+            marginRight: 0
           }}
           inputStyle={{
-            color: Colors.white,
+            color: Colors.white
           }}
           placeholder="Search..."
           onChangeText={onChange}
@@ -38,17 +40,17 @@ const SearchBar: React.FC<SearchBarProps> = ({ control, name, ...rest }) => {
           platform="ios"
           cancelButtonProps={{
             buttonTextStyle: {
-              color: Colors.primary[500],
-            },
+              color: Colors.primary[500]
+            }
           }}
           {...rest}
         />
       )}
       name={name}
     />
-  );
-};
+  )
+}
 
-export default SearchBar;
+export default SearchBar
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({})

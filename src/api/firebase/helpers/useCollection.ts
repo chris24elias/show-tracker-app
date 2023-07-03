@@ -1,165 +1,161 @@
-import React, { useEffect, useRef } from "react";
-import {
-  DocumentSnapshot,
+import type {
   CollectionReference,
-  QuerySnapshot,
   DocumentData,
-  collection,
-  onSnapshot,
-  getDocs,
-} from "firebase/firestore";
-import useSetState from "../../../hooks/useSetState";
-import { OrderBy, Query } from ".";
-import { firestore } from "../../initFirebase";
+  DocumentSnapshot,
+  QuerySnapshot
+} from 'firebase/firestore'
+import { collection, getDocs, onSnapshot } from 'firebase/firestore'
+import { useEffect, useRef } from 'react'
+
+import useSetState from '../../../hooks/useSetState'
+import { firestore } from '../../initFirebase'
+import type { OrderBy, Query } from '.'
 
 interface Options {
-  subscribe: boolean;
-  query?: Query | Query[];
-  limit?: number;
-  orderBy?: OrderBy;
+  subscribe: boolean
+  query?: Query | Query[]
+  limit?: number
+  orderBy?: OrderBy
 }
 
 const defaultOptions: Options = {
-  subscribe: false,
-};
+  subscribe: false
+}
 
 interface State {
-  data: any[];
-  loading: boolean;
-  isEnd: boolean;
+  data: any[]
+  loading: boolean
+  isEnd: boolean
 }
 
 const useCollection = (collectionPath: string, options?: Options) => {
   const [state, setState] = useSetState<State>({
     data: [],
     loading: false,
-    isEnd: false,
-  });
-  const { data, loading, isEnd } = state;
-  const finalOptions = { ...defaultOptions, ...options };
-  const { limit = 0, query, subscribe, orderBy } = finalOptions;
-  const unSubRef = useRef<any>(null);
-  const lastDocRef = useRef<DocumentSnapshot | null>(null);
+    isEnd: false
+  })
+  const { data, loading, isEnd } = state
+  const finalOptions = { ...defaultOptions, ...options }
+  const { limit = 0, query, subscribe, orderBy } = finalOptions
+  const unSubRef = useRef<any>(null)
+  const lastDocRef = useRef<DocumentSnapshot | null>(null)
 
   useEffect(() => {
-    getData();
+    getData()
     return () => {
       if (unSubRef.current) {
-        const unsub = unSubRef.current;
-        unsub();
+        const unsub = unSubRef.current
+        unsub()
       }
-    };
+    }
   }, []); //eslint-disable-line
 
-  const getData = (
-    startAfter: DocumentSnapshot | null = null,
-    append = false
-  ) => {
+  const getData = (startAfter: DocumentSnapshot | null = null, append = false) => {
     if (!collectionPath) {
-      console.warn("MUST SPECIFY COLLECTION NAME");
-      return;
+      console.warn('MUST SPECIFY COLLECTION NAME')
+      return
     }
     setState({
-      loading: true,
-    });
+      loading: true
+    })
     try {
-      const ref = constructQuery(startAfter);
+      const ref = constructQuery(startAfter)
 
       if (subscribe) {
         const unsubscribe = onSnapshot(ref, (querySnapshot) => {
-          handleData(querySnapshot, append);
-        });
-        unSubRef.current = unsubscribe;
+          handleData(querySnapshot, append)
+        })
+        unSubRef.current = unsubscribe
       } else {
         getDocs(ref).then((querySnapshot) => {
-          handleData(querySnapshot, append);
-        });
+          handleData(querySnapshot, append)
+        })
       }
     } catch (error) {
-      console.warn("ERROR", error);
+      console.warn('ERROR', error)
       setState({
-        loading: false,
-      });
+        loading: false
+      })
     }
-  };
+  }
 
   const constructQuery = (
     startAfter: DocumentSnapshot | null = null
   ): CollectionReference<DocumentData> => {
-    let ref: any = collection(firestore, collectionPath);
+    let ref: any = collection(firestore, collectionPath)
 
     if (query) {
       if (Array.isArray(query)) {
         query.forEach((q) => {
           if (q) {
-            ref = ref.where(q.fieldPath, q.opStr, q.value);
+            ref = ref.where(q.fieldPath, q.opStr, q.value)
           }
-        });
-      } else if (typeof query === "object") {
-        ref = ref.where(query.fieldPath, query.opStr, query.value);
+        })
+      } else if (typeof query === 'object') {
+        ref = ref.where(query.fieldPath, query.opStr, query.value)
       }
     }
 
     if (orderBy) {
-      ref = ref.orderBy(orderBy.fieldPath, orderBy.directionStr);
+      ref = ref.orderBy(orderBy.fieldPath, orderBy.directionStr)
     }
     if (limit) {
-      ref = ref.limit(limit);
+      ref = ref.limit(limit)
     }
 
     if (startAfter) {
-      ref = ref.startAfter(startAfter);
+      ref = ref.startAfter(startAfter)
     }
-    return ref;
-  };
+    return ref
+  }
 
   const handleData = (querySnapshot: QuerySnapshot, append: boolean) => {
     const items = querySnapshot?.docs.map((doc: any, index) => {
-      const obj = doc.data();
+      const obj = doc.data()
       if (index === querySnapshot.size - 1) {
-        lastDocRef.current = doc;
+        lastDocRef.current = doc
       }
       return {
         id: doc.id,
-        ...obj,
-      };
-    });
+        ...obj
+      }
+    })
 
-    let newData: any[] = [];
+    let newData: any[] = []
     if (append) {
-      newData = [...data, ...items];
+      newData = [...data, ...items]
     } else {
-      newData = items;
+      newData = items
     }
 
     setState({
       data: newData,
       loading: false,
-      isEnd: items.length < limit,
-    });
-  };
+      isEnd: items.length < limit
+    })
+  }
 
   // ACTIONS
 
   const refresh = () => {
-    getData();
-  };
+    getData()
+  }
 
   const getNext = () => {
     if (isEnd) {
-      console.warn("END REACHED, no more items to fetch");
-      return;
+      console.warn('END REACHED, no more items to fetch')
+      return
     }
-    getData(lastDocRef.current, true);
-  };
+    getData(lastDocRef.current, true)
+  }
 
   return {
     data,
     loading,
     refresh,
     getNext,
-    isEnd,
-  };
-};
+    isEnd
+  }
+}
 
-export default useCollection;
+export default useCollection

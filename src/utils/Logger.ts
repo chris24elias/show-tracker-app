@@ -1,8 +1,8 @@
-import moment from 'moment';
+import moment from 'moment'
 
 export const LogState = (msg: string, ...args) => {
   if (!__DEV__) {
-    return;
+    return
   }
 
   console.log(
@@ -10,12 +10,12 @@ export const LogState = (msg: string, ...args) => {
     'color: grey;',
     'color: #1ABC9C;',
     ...args
-  );
-};
+  )
+}
 
 export const LogError = (msg: string, ...args) => {
   if (!__DEV__) {
-    return;
+    return
   }
 
   console.log(
@@ -23,5 +23,5 @@ export const LogError = (msg: string, ...args) => {
     'color: grey;',
     'color: #FF0033;',
     ...args
-  );
-};
+  )
+}

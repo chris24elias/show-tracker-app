@@ -1,19 +1,20 @@
-import { useNavigation } from "@react-navigation/native";
-import { Box, FlatList, Heading, useTheme } from "native-base";
-import React from "react";
-import { StyleSheet } from "react-native";
-import ShowCard from "../../components/ShowCard";
-import routes from "../../navigation/routes";
+import { useNavigation } from '@react-navigation/native'
+import { Box, FlatList, Heading, useTheme } from 'native-base'
+import React from 'react'
+import { StyleSheet } from 'react-native'
+
+import ShowCard from '../../components/ShowCard'
+import routes from '../../navigation/routes'
 
 interface DiscoverSectionProps {
-  data: any[];
-  title: string;
+  data: any[]
+  title: string
 }
 
 const DiscoverSection: React.FC<DiscoverSectionProps> = ({ data, title }) => {
-  const navigation = useNavigation();
-  const sectionCardheight = 120;
-  const theme = useTheme();
+  const navigation = useNavigation()
+  const sectionCardheight = 120
+  const theme = useTheme()
 
   const renderItem = ({ item }) => {
     return (
@@ -24,13 +25,13 @@ const DiscoverSection: React.FC<DiscoverSectionProps> = ({ data, title }) => {
         year={item.first_air_date}
         onPress={() =>
           navigation.navigate(routes.showDetails, {
-            tmdbId: item.id,
+            tmdbId: item.id
           })
         }
         style={{ marginRight: 15 }}
       />
-    );
-  };
+    )
+  }
 
   return (
     <Box marginTop={3}>
@@ -41,15 +42,15 @@ const DiscoverSection: React.FC<DiscoverSectionProps> = ({ data, title }) => {
         data={data}
         horizontal
         contentContainerStyle={{
-          paddingHorizontal: theme.space[3],
+          paddingHorizontal: theme.space[3]
         }}
         renderItem={renderItem}
         keyExtractor={(item) => String(item.id)}
       />
     </Box>
-  );
-};
+  )
+}
 
-export default DiscoverSection;
+export default DiscoverSection
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({})

@@ -1,11 +1,12 @@
-import React from "react";
-import { StyleSheet } from "react-native";
-import { Page } from "../../theme";
+import React from 'react'
+import { StyleSheet } from 'react-native'
+
+import { Page } from '../../theme'
 
 const Splash: React.FC = () => {
-  return <Page>{/* <Text>SPLASH</Text> */}</Page>;
-};
+  return <Page>{/* <Text>SPLASH</Text> */}</Page>
+}
 
-export default Splash;
+export default Splash
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({})

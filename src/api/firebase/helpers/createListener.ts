@@ -1,27 +1,27 @@
+import type {
+  DocumentData,
+  FieldPath,
+  Query,
+  QueryConstraint,
+  QuerySnapshot,
+  WhereFilterOp
+} from 'firebase/firestore'
 import {
   collection,
-  DocumentData,
-  CollectionReference,
-  QuerySnapshot,
-  onSnapshot,
-  Query,
-  where,
-  query,
-  orderBy as ORDERBY,
   limit as LIMIT,
-  WhereFilterOp,
-  QueryConstraint,
-  FieldPath,
-  orderBy,
-  limit,
-} from "firebase/firestore";
-import { Constraint, OrderBy } from ".";
-import { firestore } from "../../initFirebase";
+  onSnapshot,
+  orderBy as ORDERBY,
+  query,
+  where
+} from 'firebase/firestore'
+
+import { firestore } from '../../initFirebase'
+import type { Constraint, OrderBy } from '.'
 
 interface Options {
-  constraints?: Constraint | Constraint[];
-  limit?: number;
-  orderBy?: OrderBy;
+  constraints?: Constraint | Constraint[]
+  limit?: number
+  orderBy?: OrderBy
 }
 
 const createListener = (
@@ -29,116 +29,111 @@ const createListener = (
   options: Options,
   callback: (data: any) => void
 ) => {
-  const { limit = 0, constraints, orderBy } = options;
+  const { limit = 0, constraints, orderBy } = options
 
   if (!collectionPath) {
-    console.warn("MUST SPECIFY COLLECTION NAME");
-    return () => {};
+    console.warn('MUST SPECIFY COLLECTION NAME')
+    return () => {}
   }
 
   const constructQuery = (): Query<DocumentData> => {
-    let ref = collection(firestore, collectionPath);
+    let ref = collection(firestore, collectionPath)
 
-    const arr = [];
+    const arr = []
 
     if (constraints) {
       if (Array.isArray(constraints)) {
         constraints.forEach((c) => {
           if (c) {
-            arr.push(where(c.fieldPath, c.opStr, c.value));
+            arr.push(where(c.fieldPath, c.opStr, c.value))
           }
-        });
-      } else if (typeof query === "object") {
-        arr.push(
-          where(constraints.fieldPath, constraints.opStr, constraints.value)
-        );
+        })
+      } else if (typeof query === 'object') {
+        arr.push(where(constraints.fieldPath, constraints.opStr, constraints.value))
       }
     }
 
     if (orderBy) {
-      arr.push(ORDERBY(orderBy.fieldPath, orderBy.directionStr));
+      arr.push(ORDERBY(orderBy.fieldPath, orderBy.directionStr))
     }
     if (limit) {
-      arr.push(LIMIT(limit));
+      arr.push(LIMIT(limit))
     }
 
-    return query(ref, ...arr);
-  };
+    return query(ref, ...arr)
+  }
 
   const handleData = (querySnapshot: QuerySnapshot) => {
     const items = querySnapshot?.docs.map((doc: any, index) => {
-      const obj = doc.data();
+      const obj = doc.data()
 
       return {
         id: doc.id,
-        ...obj,
-      };
-    });
+        ...obj
+      }
+    })
     if (callback) {
-      callback(items || []);
+      callback(items || [])
     }
-  };
+  }
 
-  const ref = constructQuery();
+  const ref = constructQuery()
 
-  const unsubscribe = onSnapshot(ref, handleData);
+  const unsubscribe = onSnapshot(ref, handleData)
 
-  return unsubscribe;
-};
+  return unsubscribe
+}
 
-export default createListener;
+export default createListener
 
 class CollectionListener {
-  ref;
-  constraints: QueryConstraint[] = [];
+  ref
+  constraints: QueryConstraint[] = []
 
   constructor(path: string) {
-    this.ref = collection(firestore, path);
+    this.ref = collection(firestore, path)
   }
 
   where(fieldPath: string, opStr: WhereFilterOp, value: any) {
-    this.constraints.push(where(fieldPath, opStr, value));
-    return this;
+    this.constraints.push(where(fieldPath, opStr, value))
+    return this
   }
 
-  orderBy(
-    fieldPath: string | FieldPath,
-    directionStr?: "asc" | "desc" | undefined
-  ) {
-    this.constraints.push(ORDERBY(fieldPath, directionStr));
-    return this;
+  orderBy(fieldPath: string | FieldPath, directionStr?: 'asc' | 'desc' | undefined) {
+    this.constraints.push(ORDERBY(fieldPath, directionStr))
+    return this
   }
 
   limit(n: number) {
-    this.constraints.push(LIMIT(n));
-    return this;
+    this.constraints.push(LIMIT(n))
+    return this
   }
 
   subscribe(callback: (data: any) => void) {
     const handleData = (querySnapshot: QuerySnapshot) => {
       const items = querySnapshot?.docs.map((doc: any, index) => {
-        const obj = doc.data();
+        const obj = doc.data()
 
         return {
           id: doc.id,
-          ...obj,
-        };
-      });
+          ...obj
+        }
+      })
       if (callback) {
-        callback(items || []);
+        callback(items || [])
       }
-    };
+    }
 
-    const ref = query(this.ref, ...this.constraints);
+    const ref = query(this.ref, ...this.constraints)
 
-    const unsubscribe = onSnapshot(ref, handleData);
-    return unsubscribe;
+    const unsubscribe = onSnapshot(ref, handleData)
+    return unsubscribe
   }
 }
 
 export const createListener2 = (collectionPath: string) => {
-  return new CollectionListener(collectionPath);
-};
+  return new CollectionListener(collectionPath)
+}
 
 // const ref = collection(firestore, "savedShows");
 // const q = query(

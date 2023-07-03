@@ -1,22 +1,23 @@
-import { NavigationContainer } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
-import * as React from "react";
-import Splash from "../screens/Splash";
-import { isReadyRef } from "./RootNavigation";
-import AuthStack from "./AuthStack";
-import MainStack from "./MainStack";
-import useAuthStore from "../stores/auth";
+import { NavigationContainer } from '@react-navigation/native'
+import { createStackNavigator } from '@react-navigation/stack'
+import * as React from 'react'
 
-const Stack = createStackNavigator();
+import Splash from '../screens/Splash'
+import useAuthStore from '../stores/auth'
+import AuthStack from './AuthStack'
+import MainStack from './MainStack'
+import { isReadyRef } from './RootNavigation'
+
+const Stack = createStackNavigator()
 
 export default function Navigation() {
-  const user = useAuthStore((state) => state.user);
+  const user = useAuthStore((state) => state.user)
 
   React.useEffect(() => {
     return () => {
-      isReadyRef.current = false;
-    };
-  }, []);
+      isReadyRef.current = false
+    }
+  }, [])
 
   return (
     <NavigationContainer
@@ -32,5 +33,5 @@ export default function Navigation() {
         )}
       </Stack.Navigator>
     </NavigationContainer>
-  );
+  )
 }

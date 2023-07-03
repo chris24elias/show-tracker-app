@@ -1,34 +1,30 @@
-import { FieldPath, WhereFilterOp } from "firebase/firestore";
+import type { FieldPath, WhereFilterOp } from 'firebase/firestore'
 
 export interface Constraint {
-  fieldPath: string;
-  opStr: WhereFilterOp;
-  value: any;
+  fieldPath: string
+  opStr: WhereFilterOp
+  value: any
 }
 
 export interface OrderBy {
-  fieldPath: string | FieldPath;
-  directionStr?: "asc" | "desc" | undefined;
+  fieldPath: string | FieldPath
+  directionStr?: 'asc' | 'desc' | undefined
 }
 
-export const where = (
-  fieldPath: string,
-  opStr: WhereFilterOp,
-  value: any
-): Constraint => {
+export const where = (fieldPath: string, opStr: WhereFilterOp, value: any): Constraint => {
   return {
     fieldPath,
     opStr,
-    value: value || "",
-  };
-};
+    value: value || ''
+  }
+}
 
 export const orderby = (
   fieldPath: string | number | FieldPath,
-  directionStr?: "asc" | "desc" | undefined
+  directionStr?: 'asc' | 'desc' | undefined
 ): OrderBy => {
   return {
     fieldPath,
-    directionStr,
-  };
-};
+    directionStr
+  }
+}

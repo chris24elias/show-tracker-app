@@ -1,19 +1,20 @@
-import React from "react";
-import { ActivityIndicator } from "react-native";
-import { Page } from "../theme";
-import AppHeader from "./AppHeader";
+import React from 'react'
+import { ActivityIndicator } from 'react-native'
+
+import { Page } from '../theme'
+import AppHeader from './AppHeader'
 
 interface PageLoaderProps {
-  title?: string;
+  title?: string
 }
 
-const PageLoader: React.FC<PageLoaderProps> = ({ title = "" }) => {
+const PageLoader: React.FC<PageLoaderProps> = ({ title = '' }) => {
   return (
     <Page>
       <AppHeader showBack title={title} />
-      <ActivityIndicator style={{ flex: 1, alignSelf: "center" }} />
+      <ActivityIndicator style={{ flex: 1, alignSelf: 'center' }} />
     </Page>
-  );
-};
+  )
+}
 
-export default PageLoader;
+export default PageLoader

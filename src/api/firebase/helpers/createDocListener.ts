@@ -1,40 +1,37 @@
-import {
-  DocumentData,
-  DocumentSnapshot,
-  doc,
-  onSnapshot,
-} from "firebase/firestore";
-import { firestore } from "../../initFirebase";
+import type { DocumentData, DocumentSnapshot } from 'firebase/firestore'
+import { doc, onSnapshot } from 'firebase/firestore'
+
+import { firestore } from '../../initFirebase'
 
 const createDocListener = (docPath: string, callback: (data) => void) => {
   if (!docPath) {
-    console.warn("MUST SPECIFY DOCUMENT PATH");
-    return () => {};
+    console.warn('MUST SPECIFY DOCUMENT PATH')
+    return () => {}
   }
 
   const handleData = (document: DocumentSnapshot<DocumentData>) => {
     try {
       if (!document) {
-        return;
+        return
       }
       const data = {
         documentId: document.id,
-        ...document.data(),
-      };
+        ...document.data()
+      }
 
       if (callback) {
-        callback(data);
+        callback(data)
       }
     } catch (error) {
-      throw new Error(error);
+      throw new Error(error)
     }
-  };
+  }
 
-  const ref = doc(firestore, docPath);
+  const ref = doc(firestore, docPath)
 
-  const unsubscribe = onSnapshot(ref, handleData);
+  const unsubscribe = onSnapshot(ref, handleData)
 
-  return unsubscribe;
-};
+  return unsubscribe
+}
 
-export default createDocListener;
+export default createDocListener

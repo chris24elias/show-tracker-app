@@ -1,24 +1,25 @@
-import * as Linking from "expo-linking";
-import routes from "./routes";
+import * as Linking from 'expo-linking'
+
+import routes from './routes'
 
 export default {
-  prefixes: [Linking.createURL("/")],
+  prefixes: [Linking.createURL('/')],
   config: {
     screens: {
       [routes.root]: {
         screens: {
           [routes.watchingTab]: {
             screens: {
-              [routes.watching]: "watching",
-            },
+              [routes.watching]: 'watching'
+            }
           },
           [routes.searchTab]: {
             screens: {
-              [routes.search]: "search",
-            },
-          },
-        },
-      },
-    },
-  },
-};
+              [routes.search]: 'search'
+            }
+          }
+        }
+      }
+    }
+  }
+}

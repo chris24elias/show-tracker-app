@@ -1,4 +1,5 @@
-import { LayoutAnimation, LayoutAnimationConfig } from 'react-native';
+import type { LayoutAnimationConfig } from 'react-native'
+import { LayoutAnimation } from 'react-native'
 
 // Spring
 // const CustomLayoutSpring = {
@@ -97,38 +98,38 @@ const animationConfigs = {
       property: LayoutAnimation.Properties.opacity
     }
   }
-};
+}
 
-type LayoutAnimationHelper = (duration?: number) => void;
+type LayoutAnimationHelper = (duration?: number) => void
 
 interface LayoutAnimations {
-  spring: LayoutAnimationHelper;
-  linear: LayoutAnimationHelper;
-  ease: LayoutAnimationHelper;
-  keyboard: LayoutAnimationHelper;
-  scaleLinear: LayoutAnimationHelper;
-  scaleSpring: LayoutAnimationHelper;
-  fade: LayoutAnimationHelper;
-  ease2: LayoutAnimationHelper;
+  spring: LayoutAnimationHelper
+  linear: LayoutAnimationHelper
+  ease: LayoutAnimationHelper
+  keyboard: LayoutAnimationHelper
+  scaleLinear: LayoutAnimationHelper
+  scaleSpring: LayoutAnimationHelper
+  fade: LayoutAnimationHelper
+  ease2: LayoutAnimationHelper
 }
 
 const getHelpers = (): LayoutAnimations => {
-  const helpers: LayoutAnimations = {};
+  const helpers: LayoutAnimations = {}
   Object.keys(animationConfigs).forEach((key) => {
-    helpers[key] = (duration?: number) => runAnimation(animationConfigs[key], duration);
-  });
-  return helpers;
-};
+    helpers[key] = (duration?: number) => runAnimation(animationConfigs[key], duration)
+  })
+  return helpers
+}
 
 const runAnimation = (config: LayoutAnimationConfig, duration: number) => {
   LayoutAnimation.configureNext({
     ...config,
     duration: duration || config.duration
-  });
-};
+  })
+}
 
 export default {
   //   spring,
   //   linear,
   ...getHelpers()
-};
+}

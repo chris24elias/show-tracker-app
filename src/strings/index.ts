@@ -9,4 +9,4 @@ export default {
     emailInput: 'Email',
     passwordInput: 'Password'
   }
-};
+}

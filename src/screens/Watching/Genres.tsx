@@ -1,14 +1,15 @@
-import { Box, Text, useTheme } from "native-base";
-import React from "react";
-import { useQuery } from "react-query";
-import api from "../../api";
-import Steve from "react-native-steve";
+import { Box, Text, useTheme } from 'native-base'
+import React from 'react'
+import Steve from 'react-native-steve'
+import { useQuery } from 'react-query'
 
-export type IGenresProps = {};
+import api from '../../api'
+
+export type IGenresProps = {}
 
 const Genres: React.FC<IGenresProps> = ({}) => {
-  const { data: genres } = useQuery("TVGenres", api.getTVGenres);
-  const theme = useTheme();
+  const { data: genres } = useQuery('TVGenres', api.getTVGenres)
+  const theme = useTheme()
 
   return (
     <Box mt="3">
@@ -27,15 +28,15 @@ const Genres: React.FC<IGenresProps> = ({}) => {
             >
               <Text>{item.name}</Text>
             </Box>
-          );
+          )
         }}
         containerStyle={{
-          paddingHorizontal: theme.sizes["3"],
+          paddingHorizontal: theme.sizes['3']
         }}
         keyExtractor={(item) => item.id}
       />
     </Box>
-  );
-};
+  )
+}
 
-export { Genres };
+export { Genres }
