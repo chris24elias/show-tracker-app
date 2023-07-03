@@ -57,10 +57,9 @@ const sortShows = (shows: SavedShow[], sort: 'Date Added' | 'Alphabetical' | 'Ye
 
   if (sort === 'Date Added') {
     return shows.sort((a, b) => {
-      // eslint-disable-next-line
-      const ta = a?.date_added?.seconds;
-      // eslint-disable-next-line
-      const tb = b?.date_added?.seconds;
+      const ta = a?.date_added?.seconds
+
+      const tb = b?.date_added?.seconds
       return tb - ta
     })
   }
