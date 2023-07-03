@@ -1,6 +1,7 @@
 import { Box, FlatList, Row, Text } from 'native-base'
 import React from 'react'
-import { Image } from 'react-native'
+
+import { Image } from '@/ui/image'
 
 import api from '../../api'
 import AppHeader from '../../components/AppHeader'
@@ -47,7 +48,7 @@ const Episode = ({ name, still_path, runtime, overview, index }) => {
           source={{
             uri: api.getUrlForImagePath(still_path)
           }}
-          resizeMode="contain"
+          contentFit="contain"
           style={{
             height: imageSize,
             width: imageSize * 1.78,

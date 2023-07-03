@@ -1,12 +1,12 @@
 import { AntDesign } from '@expo/vector-icons'
 import { Actionsheet, Box, CheckIcon, Heading, Icon, IconButton, useDisclose } from 'native-base'
 import React, { useMemo, useState } from 'react'
-import { StyleSheet, useWindowDimensions } from 'react-native'
-import { FlatGrid } from 'react-native-super-grid'
+import { useWindowDimensions } from 'react-native'
 
 import ShowCard from '../../components/ShowCard'
 import routes from '../../navigation/routes'
 import useDataStore from '../../stores/data'
+import { FlashGrid } from '../../ui/flash-grid'
 import LayoutAnimations from '../../utils/LayoutAnimations'
 import type { SavedShow } from '../../utils/types'
 import TopTabs from './TopTabs'
@@ -142,7 +142,7 @@ const Watching: React.FC<WatchingProps> = ({ navigation }) => {
         <TopTabs selectedFilter={selectedFilter} onFilterChange={onFilterChange} />
 
         <Box marginTop={5} />
-        <FlatGrid
+        <FlashGrid
           keyExtractor={(item) => item.id}
           itemDimension={SEARCH_CARD_HEIGHT}
           data={filteredAndSortedShows}
@@ -155,5 +155,3 @@ const Watching: React.FC<WatchingProps> = ({ navigation }) => {
 }
 
 export default Watching
-
-const styles = StyleSheet.create({})

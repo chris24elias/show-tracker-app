@@ -1,7 +1,9 @@
 import { Text } from 'native-base'
 import React from 'react'
 import type { ViewStyle } from 'react-native'
-import { Image, StyleSheet, TouchableOpacity, View } from 'react-native'
+import { StyleSheet, TouchableOpacity, View } from 'react-native'
+
+import { Image } from '@/ui/image'
 
 import api from '../api'
 
@@ -43,8 +45,9 @@ const ShowCard: React.FC<ShowCardProps> = ({ poster, title, year, onPress, size,
         {poster ? (
           <Image
             source={{ uri: getPathForPoster() }}
-            style={{ height: '100%', width: '100%', resizeMode: 'cover' }}
-            onError={(e) => console.log('error', e.nativeEvent.error)}
+            style={{ height: '100%', width: '100%' }}
+            contentFit="cover"
+            // onError={(e) => console.log('error', e.nativeEvent.error)}
           />
         ) : null}
       </TouchableOpacity>

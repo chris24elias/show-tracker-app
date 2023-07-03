@@ -1,9 +1,11 @@
 import { LinearGradient } from 'expo-linear-gradient'
 import { Box } from 'native-base'
 import React, { useState } from 'react'
-import { Image, StyleSheet } from 'react-native'
+import { StyleSheet } from 'react-native'
 import { useSharedValue } from 'react-native-reanimated'
 import Carousel from 'react-native-reanimated-carousel'
+
+import { Image } from '@/ui/image'
 
 import { Colors } from '../../theme'
 import { Pagination } from './Pagination'

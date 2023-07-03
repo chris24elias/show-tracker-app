@@ -1,6 +1,8 @@
-import { Box, Button, Flex, Image } from 'native-base'
+import { Box, Button, Flex } from 'native-base'
 import React from 'react'
 import { StyleSheet, useWindowDimensions } from 'react-native'
+
+import { Image } from '@/ui/image'
 
 import routes from '../../navigation/routes'
 
@@ -16,12 +18,11 @@ const Landing: React.FC<LandingProps> = ({ navigation }) => {
         {/* <Heading fontSize={84}>Show Tracker</Heading> */}
         <Image
           source={require('../../assets/images/ShowTracker.png')}
-          resizeMode="contain"
+          contentFit="contain"
           style={{
             // height: 700,
             width: window.width * 0.7
           }}
-          alt="logo"
         />
       </Flex>
       <Button

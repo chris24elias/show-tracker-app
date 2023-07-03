@@ -1,6 +1,13 @@
 {
   "extends": "eslint-config-react-native-chris24elias/tsconfig.json",
   "compilerOptions": {
-    "strict": true
-  }
+    "strict": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+      // "@env": ["./src/core/env.js"]
+    },
+    "esModuleInterop": true
+  },
+  "exclude": ["node_modules", "babel.config.js", "metro.config.js", "android", "ios"]
 }

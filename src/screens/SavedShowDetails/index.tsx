@@ -1,7 +1,7 @@
 import { AntDesign } from '@expo/vector-icons'
 import { Box, Button, Heading, Icon, Pressable, Row, Text } from 'native-base'
-import React from 'react'
-import { Image, ScrollView, useWindowDimensions } from 'react-native'
+import React, { useMemo } from 'react'
+import { ActivityIndicator, ScrollView, useWindowDimensions } from 'react-native'
 import Animated, {
   Extrapolate,
   interpolate,
@@ -9,6 +9,8 @@ import Animated, {
   useAnimatedStyle,
   useSharedValue
 } from 'react-native-reanimated'
+
+import { Image } from '@/ui/image'
 
 import { addShow, updateStatus } from '../../api/firebase/myShows'
 import FloatingBackButton from '../../components/FloatingBackButton'
@@ -32,9 +34,9 @@ const SavedShowDetails: React.FC<SavedShowDetailsProps> = ({ navigation, route }
 
   const { height, width } = useWindowDimensions()
   const myShows = useDataStore((state) => state.myShows)
-  const savedShow = myShows.find((s) => s.tmdbId === tmdbId)
+  const savedShow = useMemo(() => myShows.find((s) => s.tmdbId === tmdbId), [myShows, tmdbId])
   const { data, isLoading } = useShowDetails(tmdbId)
-  const { data: recommendations = [], isLoading: isLoading2 } = useShowRecommendations(tmdbId)
+  const { data: recommendations = [], isLoading: reccsLoading } = useShowRecommendations(tmdbId)
   const { data: showImages, isLoading: isLoading3 } = useShowImages(tmdbId)
   const scrollY = useSharedValue<number>(0)
   const isScrolling = useSharedValue(false)
@@ -42,8 +44,7 @@ const SavedShowDetails: React.FC<SavedShowDetailsProps> = ({ navigation, route }
   const containerSize = height * 0.45
 
   const onAddToList = () => {
-    // eslint-disable-next-line
-    const { poster_path, name, first_air_date } = data;
+    const { poster_path, name, first_air_date } = data
     addShow({
       status: 'watching',
       tmdbId,
@@ -94,7 +95,7 @@ const SavedShowDetails: React.FC<SavedShowDetailsProps> = ({ navigation, route }
     }
   })
 
-  if (isLoading || isLoading2 || isLoading3) {
+  if (isLoading || reccsLoading || isLoading3) {
     return (
       <Page>
         <FloatingBackButton />
@@ -102,16 +103,7 @@ const SavedShowDetails: React.FC<SavedShowDetailsProps> = ({ navigation, route }
     )
   }
 
-  // eslint-disable-next-line
-  const {
-    genres,
-    name,
-    vote_average,
-    episode_run_time,
-    first_air_date,
-    overview,
-    seasons,
-  } = data;
+  const { genres, name, vote_average, episode_run_time, first_air_date, overview, seasons } = data
 
   const backdrops = showImages?.backdrops || []
   const posters = showImages?.posters || []
@@ -191,10 +183,14 @@ const SavedShowDetails: React.FC<SavedShowDetailsProps> = ({ navigation, route }
           <Heading size="lg" marginBottom={2}>
             Recommendations
           </Heading>
-          <Recommendations
-            recommendations={recommendations}
-            onRecommendationPress={onRecommendationPress}
-          />
+          {reccsLoading ? (
+            <ActivityIndicator />
+          ) : (
+            <Recommendations
+              recommendations={recommendations}
+              onRecommendationPress={onRecommendationPress}
+            />
+          )}
         </Box>
       </Animated.ScrollView>
     </Page>
@@ -294,7 +290,7 @@ const Season = ({
           width: size,
           borderRadius: 12
         }}
-        resizeMode="cover"
+        contentFit="cover"
       />
       <Box mt="2">
         <Text
